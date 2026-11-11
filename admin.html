@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Administrateur — Fondation Paluku</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="header-contenu">
+      <div class="logo-conteneur">
+        <img src="logo.png" alt="Logo Fondation Paluku" class="logo">
+
+
+        <div class="header-titre">
+          <h1>Fondation Paluku</h1>
+          <p>Siwako Makuké Kapako — Administration</p>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">← Retour au site</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- === PAGE DE CONNEXION === -->
+    <div id="section-login" style="max-width:420px; margin:4rem auto; padding:2rem; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+      <h2 style="text-align:center; color:#0A3D62; margin-bottom:1.5rem;">🔐 Connexion Administrateur</h2>
+      <p style="text-align:center; color:#718096; margin-bottom:1.5rem;">Entrez le mot de passe pour accéder à l'espace de gestion</p>
+      
+      <form onsubmit="verifierMotDePasse(event)">
+        <label for="mdp-admin">Mot de passe</label>
+        <input type="password" id="mdp-admin" placeholder="Entrez le mot de passe..." required>
+        <div id="erreur-mdp" class="message erreur" style="display:none;">
+          ❌ Mot de passe incorrect. Veuillez réessayer.
+        </div>
+        <button type="submit" style="width:100%; margin-top:0.5rem;">Se connecter</button>
+      </form>
+    </div>
+
+    <!-- === ESPACE ADMINISTRATEUR (Caché par défaut) === -->
+    <div id="section-admin" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+        <h2 class="titre-section" style="margin:0; text-align:left;">⚙️ Tableau de bord — Administration</h2>
+        <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
+      </div>
+
+      <!-- Onglets -->
+      <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid #E2E8F0; padding-bottom:0.5rem;">
+        <button class="onglet actif" onclick="afficherOnglet('suggestions')" id="btn-suggestions">💬 Suggestions & Commentaires</button>
+        <button class="onglet" onclick="afficherOnglet('dons')" id="btn-dons">💰 Suivi des Dons</button>
+      </div>
+
+      <!-- === ONGLET SUGGESTIONS === -->
+      <div id="onglet-suggestions">
+        <h3>Suggestions citoyennes en attente</h3>
+        <p style="color:#718096;">Cliquez sur "Approuver" pour publier un message sur le site, ou "Supprimer" pour le rejeter.</p>
+        
+        <table class="tableau-admin">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Contact</th>
+              <th>Message</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-suggestions">
+            <!-- Les suggestions apparaîtront ici dynamiquement -->
+            <tr>
+              <td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucune suggestion pour le moment</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- === ONGLET DONS === -->
+      <div id="onglet-dons" style="display:none;">
+        <h3>Suivi des dons reçus</h3>
+        <p style="color:#718096;">Enregistrez et consultez ici les contributions reçues.</p>
+        
+        <div style="background:#F4F6F8; padding:1.5rem; border-radius:6px; margin-bottom:1.5rem;">
+          <h4 style="margin-bottom:1rem;">➕ Enregistrer un nouveau don</h4>
+          <form id="form-don" onsubmit="enregistrerDon(event)">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+              <div>
+                <label>Nom du donateur</label>
+                <input type="text" id="don-nom" required>
+              </div>
+              <div>
+                <label>Montant (USD)</label>
+                <input type="number" id="don-montant" required>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.5rem;">
+              <div>
+                <label>Mode de paiement</label>
+                <select id="don-mode">
+                  <option value="Airtel Money">Airtel Money</option>
+                  <option value="M-Pesa">M-Pesa</option>
+                  <option value="Orange Money">Orange Money</option>
+                  <option value="Versement Bancaire">Versement Bancaire</option>
+                </select>
+              </div>
+              <div>
+                <label>Date</label>
+                <input type="date" id="don-date" required>
+              </div>
+            </div>
+            <button type="submit" style="margin-top:1rem;">Enregistrer le don</button>
+          </form>
+        </div>
+
+        <table class="tableau-admin">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Donateur</th>
+              <th>Montant</th>
+              <th>Mode</th>
+              <th>Reçu</th>
+            </tr>
+          </thead>
+          <tbody id="
+table-dons">
+            <tr>
+              <td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucun don enregistré pour le moment</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div style="margin-top:2rem; padding:1.5rem; background:#E8F8F0; border-radius:6px;">
+          <h4>📊 Total collecté</h4>
+          <p style="font-size:1.8rem; font-weight:700; color:#27AE60; margin-top:0.5rem;" id="total-dons">0 USD</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .onglet {
+      background: transparent;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      color: #718096;
+    }
+    .onglet.actif {
+      border-bottom-color: #0A3D62;
+      color: #0A3D62;
+      font-weight: 600;
+    }
+    .onglet:hover {
+      color: #0A3D62;
+    }
+  </style>
+
+  <script>
+    // 🔐 Mot de passe administrateur — à modifier selon vos besoins
+    const MOT_DE_PASSE_ADMIN = 'admin2026'; // ⚠️ Changez ce mot de passe !
+
+    // Vérification du mot de passe
+    function verifierMotDePasse(e) {
+      e.preventDefault();
+      const saisi = document.getElementById('mdp-admin').value;
+      if (saisi === MOT_DE_PASSE_ADMIN) {
+        document.getElementById('section-login').style.display = 'none';
+        document.getElementById('section-admin').style.display = 'block';
+        document.getElementById('erreur-mdp').style.display = 'none';
+      } else {
+        document.getElementById('erreur-mdp').style.display = 'block';
+      }
+    }
+
+    // Déconnexion
+    function deconnexion() {
+      document.getElementById('section-login').style.display = 'block';
+      document.getElementById('section-admin').style.display = 'none';
+      document.getElementById('mdp-admin').value = '';
+    }
+
+    // Changement d'onglet
+    function afficherOnglet(nom) {
+      document.querySelectorAll('[id^="onglet-"]').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.onglet').forEach(el => el.classList.remove('actif'));
+      document.getElementById('onglet-' + nom).style.display = 'block';
+      document.getElementById('btn-' + nom).classList.add('actif');
+    }
+
+    // Enregistrer un don
+    function enregistrerDon(e) {
+      e.preventDefault();
+      const nom = document.getElementById('don-nom').value;
+      const montant = parseFloat(document.getElementById('don-montant').value);
+      const mode = document.getElementById('don-mode').value;
+      const date = document.getElementById('don-date').value;
+
+      const dons = JSON.parse(localStorage.getItem('dons') || '[]');
+      dons.push({ date, nom, montant, mode });
+      localStorage.setItem('dons', JSON.stringify(dons));
+      
+      document.getElementById('form-don').reset();
+      mettreAJourTableauDons();
+    }
+
+    // Mettre à jour le tableau des dons
+    function mettreAJourTableauDons() {
+      const dons = JSON.parse(localStorage.getItem('dons') || '[]');
+      const tbody = document.getElementById('table-dons');
+      const totalEl = document.getElementById('total-dons');
+      
+      if (dons.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucun don enregistré pour le moment</td></tr>';
+        totalEl.textContent = '0 USD';
+        return;
+      }
+      
+      let total = 0;
+      tbody.innerHTML = '';
+      dons.forEach((don, index) => {
+        total += don.montant;
+        tbody.innerHTML += `
+          <tr>
+            <td>${don.date}</td>
+            <td>${don.nom}</td>
+            <td>${don.montant} USD</td>
+            <td>${don.mode}</td>
+            <td>✅ Reçu</td>
+          </tr>
+        `;
+      });
+      totalEl.textContent = total + ' USD';
+    }
+
+    // Charger les suggestions
+    function chargerSuggestions() {
+      const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+      const tbody = document.getElementById('table-suggestions');
+      
+      if (messages.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucune suggestion pour le moment</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      messages.forEach((msg, index) => {
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${msg.nom}</strong></td>
+            <td>${msg.contact}</td>
+            <td style="max-width:250px;">${msg.message.substring(0, 50)}...</td>
+            <td>${msg.date}</td>
+            <td>
+              <button class="bouton-voir" onclick="approuverMessage(${index})">✅ Approuver</button>
+              <button class="bouton-suppr" onclick="supprimerMessage(${index})">❌ Supprimer</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // Approuver un message
+    function approuverMessage(index) {
+      const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+      const approuves = JSON.parse(localStorage.getItem('messagesApprouves') || '[]');
+      
+      approuves.push(messages[index]);
+      messages.splice(index, 1);
+      
+      localStorage.setItem('messages', JSON.stringify(messages));
+      localStorage.setItem('messagesApprouves', JSON.stringify(approuves));
+      
+      chargerSuggestions();
+      mettreAJourSuggestionsPubliques();
+    }
+
+    // Supprimer un message
+    function supprimerMessage(index) {
+      if (confirm('Supprimer définitivement ce message ?')) {
+        const messages = JSON.parse(localStorage.getItem('messages') || '[]');
+        messages.splice(index, 1);
+        localStorage.setItem('messages', JSON.stringify(messages));
+        chargerSuggestions();
+      }
+    }
+
+    // Mettre à jour l'affichage public des suggestions
+    function mettreAJourSuggestionsPubliques() {
+      const liste = document.getElementById('liste-suggestions');
+      if (!liste) return;
+      
+      const approuves = JSON.parse(localStorage.getItem('messagesApprouves') || '[]');
+      
+      if (approuves.length === 0) {
+        liste.innerHTML = '<p style="color:#718096; font-style:italic;">Aucune suggestion publiée pour le moment. Soyez le premier à partager la vôtre !</p>';
+        return;
+      }
+      
+      liste.innerHTML = '';
+      approuves.forEach(msg => {
+        liste.innerHTML += `
+          <div style="padding:0.8rem; background:#F4F6F8; border-radius:4px; margin-bottom:0.8rem;">
+            <strong>${msg.nom}</strong> <small style="color:#718096;">— ${msg.date}</small>
+            <p style="margin-top:0.4rem; font-style:italic;">"${msg.message}"</p>
+          </div>
+        `;
+      });
+    }
+
+    // Initialisation au chargement
+    window.onload = function() {
+      mettreAJourTableauDons();
+      chargerSuggestions();
+      mettreAJourSuggestionsPubliques();
+    };
+  </script>
+
+</body>
+</html>

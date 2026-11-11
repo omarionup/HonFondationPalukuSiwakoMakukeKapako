@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Fondation Paluku</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="header-contenu">
+      <div class="logo-conteneur">
+        <img src="logo.png" alt="Logo Fondation Paluku" class="logo">
+
+        <div class="header-titre">
+          <h1>Fondation Paluku</h1>
+          <p>Siwako Makuké Kapako</p>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="projets.html">Nos Projets</a></li>
+          <li><a href="realisations.html">Réalisations</a></li>
+          <li><a href="vie-politique.html">Vie Politique</a></li>
+          <li><a href="contact.html" class="actif">Contact</a></li>
+          <li><a href="faire-un-don.html" class="bouton-don">Faire un Don</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <h2 class="titre-section">Nous Contacter</h2>
+    <p style="text-align:center; max-width:700px; margin:0 auto 3rem;">Votre voix compte. Partagez vos suggestions, vos préoccupations ou vos questions — nous vous répondrons dans les meilleurs délais.</p>
+
+    <div class="grille-2">
+      <div class="carte">
+        <h3>📩 Envoyer un message ou une suggestion</h3>
+        <form id="form-contact">
+          <label for="nom">Votre nom complet *</label>
+          <input type="text" id="nom" required placeholder="Ex: Jean Mulenda">
+          
+          <label for="email">Votre email ou téléphone *</label>
+          <input type="text" id="email" required placeholder="votre@email.com ou +243 XX XX XX XX">
+          
+          <label for="sujet">Sujet</label>
+          <select id="sujet">
+            <option value="suggestion">Suggestion citoyenne</option>
+            <option value="question">Question sur nos projets</option>
+            <option value="partenariat">Proposition de partenariat</option>
+            <option value="autre">Autre demande</option>
+          </select>
+          
+          <label for="message">Votre message *</label>
+          <textarea id="message" rows="6" required placeholder="Écrivez votre message ici..."></textarea>
+          
+          <button type="submit">Envoyer le message</button>
+          
+          <div id="message-confirmation" class="message succes">
+            ✅ Merci ! Votre message a été envoyé avec succès. Il sera examiné par notre équipe et publié dans la section citoyens s'il est approuvé.
+          </div>
+        </form>
+      </div>
+      
+      <div>
+        <div class="carte">
+          <h3>📍 Nos Coordonnées</h3>
+          <p><strong>Siège :</strong><br>Lubero-centre, Territoire de Lubero<br>Province du Nord-Kivu<br>République Démocratique du Congo</p>
+          
+          <p style="margin-top:1rem;"><strong>Heures de bureau :</strong><br>Lundi — Vendredi : 8h00 — 16h00<br>Samedi : 9h00 — 13h00</p>
+          
+          <p style="margin-top:1rem;"><strong>Téléphone :</strong><br>📞 +243 82 XX XX XX XX<br>📞 +243 81 XX XX XX XX</p>
+          
+          <p style="margin-top:1rem;"><strong>Email :</strong><br>✉️ contact@fondationpaluku.cd<br>✉️ info@fondationpaluku.cd</p>
+        </div>
+        
+        <div class="carte" style="margin-top:1.5rem;">
+          <h3>💬 Paroles de Citoyens</h3>
+          <p>Les suggestions et messages approuvés apparaissent ici :</p>
+          <div id="liste-suggestions">
+            <p style="color:#718096; font-style:italic;">Aucune suggestion publiée pour le moment. Soyez le premier à partager la vôtre !</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-contenu">
+      <div class="footer-col">
+        <h4>Fondation Paluku</h4>
+        <p>Siwako Makuké Kapako<br>Au service du peuple de Lubero</p>
+      </div>
+      <div class="footer-col">
+        <h4>Liens rapides</h4>
+        <a href="index.html">Accueil</a>
+        <a href="projets.html">Nos Projets</a>
+        <a href="realisations.html">Réalisations</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <a href="vie-politique.html">Vie Politique</a>
+        <a href="faire-un-don.html">Faire un Don</a>
+        <a href="admin.html">Administration</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +247 XXX XXX XXX<br>✉️ contact@fondationpaluku.cd</p>
+      </div>
+    </div>
+    <div class="footer-bas">
+      © 2026 Fondation Paluku Siwako Makuké Kapako — Tous droits réservés
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

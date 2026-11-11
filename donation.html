@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Donation • Fondation PALUKU SIWAKO MAKUKE KAPAKO</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <img class="logo" src="logo.png" alt="Logo Fondation" />
+        <div>
+          <h1>Donation & Commentaires</h1>
+          <div class="sub">Compte client • Démo • Modération admin</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="accueil.html">Accueil</a>
+        <a href="politique.html">Vie Politique</a>
+        <a href="donation.html">Donation</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="hero" style="grid-template-columns: 1fr 1fr;">
+      <div class="panel hero-left" style="padding:18px;">
+        <div class="kicker"><span class="dot"></span>Créer un compte & faire un don (démo)</div>
+        <h2 class="hero-title" style="font-size:22px; margin-top:10px;">Donation</h2>
+
+        <div class="card" style="margin-top:12px;">
+          <form id="donForm" class="form">
+            <div class="field">
+              <label>Nom complet</label>
+              <input id="donName" type="text" required placeholder="Ex: Jean K..." />
+            </div>
+
+            <div class="field">
+              <label>Email</label>
+              <input id="donEmail" type="email" required placeholder="ex: jean@mail.com" />
+            </div>
+
+            <div class="field">
+              <label>Mot de passe (démo)</label>
+              <input id="donPass" type="password" required placeholder="Mot de passe" />
+            </div>
+
+            <div class="field">
+              <label>Montant</label>
+              <input id="donAmount" type="number" required min="1" placeholder="Ex: 50" />
+            </div>
+
+            <div class="field">
+              <label>Devise / Type</label>
+              <select id="donType">
+                <option value="USD">USD</option>
+                <option value="CDF">CDF</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Projet ciblé (optionnel)</label>
+              <input id="donProject" type="text" placeholder="Ex: Éducation, Santé..." />
+            </div>
+
+            <button class="btn btn-primary" type="submit">Soumettre le don</button>
+            <p id="donMsg" class="muted" role="status" aria-live="polite" style="margin:0;"></p>
+          </form>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3>Commentaire sur nos activités</h3>
+          <form id="commentForm" class="form" style="margin-top:10px;">
+            <div class="field">
+              <label>Votre commentaire</label>
+              <textarea id="commentText" rows="4" required placeholder="Décrivez votre avis, suggestion ou retour..."></textarea>
+            </div>
+
+            <div class="field">
+              <label>Nom</label>
+              <input id="commentName" type="text" required placeholder="Ex: Marie..." />
+            </div>
+
+            <button class="btn btn-ghost" type="submit">Envoyer (en attente)</button>
+            <p id="commentMsg" class="muted" role="status" aria-live="polite" style="margin:0;"></p>
+          </form>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="card">
+          <h3>Commentaires validés (public)</h3>
+          <div id="publicComments" class="comment-list" style="margin-top:10px;"></div>
+        </div>
+
+        <div class="card">
+          <h3>Mode Admin (démo)</h3>
+          <p class="muted" style="margin-top:8px; line-height:1.6;">
+            Modération via mot de passe (démo uniquement, stockage local).  
+            Pour du réel : branchement backend (recommandé).
+          </p>
+
+          <div class="field" style="margin-top:12px;">
+            <label>Mot de passe admin</label>
+            <input type="password" id="adminPass" placeholder="Entrer le mot de passe admin" />
+          </div>
+
+          <button class="btn btn-primary" id="adminLogin" type="button" style="margin-top:8px;">Connexion admin</button>
+
+          <div id="adminPanel" class="admin-panel" style="display:none;">
+            <div class="hr"></div>
+            <h3 style="margin:0 0 10px;">Commentaires en attente</h3>
+            <div id="pendingComments" class="comment-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    © <span id="year"></span> Fondation PALUKU SIWAKO MAKUKE KAPAKO
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
