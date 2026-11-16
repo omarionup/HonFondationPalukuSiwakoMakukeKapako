@@ -5,152 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Espace Administrateur — Fondation Paluku</title>
   <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<!-- ===== BARRE ALERTES ===== -->
-<div class="barre-alertes">
-  <div class="etiquette-alerte">
-    <span class="point-clignotant"></span>
-    ALERTES
-  </div>
-  <div class="contenu-actualites">
-    <span class="item-actu">🔒 Espace Administrateur — Fondation Paluku</span>
-  </div>
-</div>
-
-  <header>
-    <div class="header-contenu">
-      <div class="logo-conteneur">
-        <img src="images/logo.png" alt="Logo Fondation Paluku" class="logo">
-        <div class="header-titre">
-          <h1>Fondation Paluku</h1>
-          <p>Siwako Makuké Kapako — Administration</p>
-        </div>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="index.html">← Retour au site</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <!-- === PAGE DE CONNEXION === -->
-    <div id="section-login" style="max-width:420px; margin:4rem auto; padding:2rem; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-      <h2 style="text-align:center; color:#0A3D62; margin-bottom:1.5rem;">🔐 Connexion Administrateur</h2>
-      <p style="text-align:center; color:#718096; margin-bottom:1.5rem;">Entrez le mot de passe pour accéder à l'espace de gestion</p>
-      
-      <form onsubmit="verifierMotDePasse(event)">
-        <label for="mdp-admin">Mot de passe</label>
-        <input type="password" id="mdp-admin" placeholder="Entrez le mot de passe..." required>
-        <div id="erreur-mdp" class="message erreur" style="display:none; margin-top:0.5rem;">
-          ❌ Mot de passe incorrect. Veuillez réessayer.
-        </div>
-        <button type="submit" style="width:100%; margin-top:0.5rem;">Se connecter</button>
-      </form>
-    </div>
-
-    <!-- === ESPACE ADMINISTRATEUR === -->
-    <div id="section-admin" style="display:none;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
-        <h2 class="titre-section" style="margin:0; text-align:left;">⚙️ Tableau de bord — Administration</h2>
-        <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
-      </div>
-
-      <!-- Onglets -->
-      <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid #E2E8F0; padding-bottom:0.5rem; flex-wrap:wrap;">
-        <button class="onglet actif" onclick="afficherOnglet('suggestions')" id="btn-suggestions">💬 Suggestions & Commentaires</button>
-        <button class="onglet" onclick="afficherOnglet('dons')" id="btn-dons">💰 Suivi des Dons</button>
-      </div>
-
-      <!-- === ONGLET SUGGESTIONS === -->
-      <div id="onglet-suggestions">
-        <h3>Suggestions citoyennes en attente</h3>
-        <p style="color:#718096; margin-bottom:1rem;">Cliquez sur ✅ Approuver pour publier ou ❌ Supprimer pour rejeter.</p>
-        
-        <table class="tableau-admin" style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden;">
-          <thead>
-            <tr style="background:#F4F6F8;">
-              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Nom</th>
-              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Contact</th>
-              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Message</th>
-              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Date</th>
-              <th style="padding:0.8rem; text-align:center; border-bottom:2px solid #E2E8F0;">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="table-suggestions">
-            <tr>
-              <td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Chargement...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- === ONGLET DONS === -->
-      <div id="onglet-dons" style="display:none;">
-        <h3>Suivi des dons reçus</h3>
-        <p style="color:#718096; margin-bottom:1rem;">Enregistrez et consultez ici les contributions reçues.</p>
-        
-        <div style="background:#F4F6F8; padding:1.5rem; border-radius:6px; margin-bottom:1.5rem;">
-          <h4 style="margin-bottom:1rem;">➕ Enregistrer un nouveau don</h4>
-          <form id="form-don">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-              <div>
-                <label>Nom du donateur</label>
-                <input type="text" id="don-nom" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
-              </div>
-              <div>
-                <label>Montant (USD)</label>
-                <input type="number" id="don-montant" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
-              </div>
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.5rem;">
-              <div>
-                <label>Mode de paiement</label>
-                <select id="don-mode" style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
-                  <option value="Airtel Money">Airtel Money</option>
-                  <option value="M-Pesa">M-Pesa</option>
-                  <option value="Orange Money">Orange Money</option>
-                  <option value="Versement Bancaire">Versement Bancaire</option>
-                </select>
-              </div>
-              <div>
-                <label>Date</label>
-                <input type="date" id="don-date" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
-              </div>
-            </div>
-            <button type="submit" style="margin-top:1rem;">Enregistrer le don</button>
-          </form>
-        </div>
-
-        <table class="tableau-admin" style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden;">
-          <thead>
-            <tr style="background:#<thead>
-            <tr style="background:#F4F6F8;">
-              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Date</th>
-              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Donateur</th>
-              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Montant</th>
-              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Mode</th>
-              <th style="padding:0.8rem; text-align:center; border-bottom:2px solid #E2E8F0;">Reçu</th>
-            </tr>
-          </thead>
-          <tbody id="table-dons">
-            <tr>
-              <td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Chargement...</td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <div style="margin-top:2rem; padding:1.5rem; background:#E8F8F0; border-radius:6px;">
-          <h4>📊 Total collecté</h4>
-          <p style="font-size:1.8rem; font-weight:700; color:#27AE60; margin-top:0.5rem;" id="total-dons">0 USD</p>
-        </div>
-      </div>
-    </div>
-  </main>
-
   <style>
     .onglet {
       background: transparent;
@@ -192,17 +46,186 @@
       box-sizing: border-box;
     }
   </style>
+</head>
+<body>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.min.js"></script>
-  <script src="firebase-config.js"></script>
+<!-- ===== BARRE ALERTES ===== -->
+<div class="barre-alertes">
+  <div class="etiquette-alerte">
+    <span class="point-clignotant"></span>
+    ALERTES
+  </div>
+  <div class="contenu-actualites">
+    <span class="item-actu">🔒 Espace Administrateur — Fondation Paluku</span>
+  </div>
+</div>
 
-  <script>
-    // 🔐 Mot de passe administrateur — à modifier !
+<header>
+  <div class="header-contenu">
+    <div class="logo-conteneur">
+      <img src="logo.png" alt="Logo Fondation Paluku" class="logo">
+      <div class="header-titre">
+        <h1>Fondation Paluku</h1>
+        <p>Siwako Makuké Kapako — Administration</p>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">← Retour au site</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- === PAGE DE CONNEXION === -->
+  <div id="section-login" style="max-width:420px; margin:4rem auto; padding:2rem; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    <h2 style="text-align:center; color:#0A3D62; margin-bottom:1.5rem;">🔐 Connexion Administrateur</h2>
+    <p style="text-align:center; color:#718096; margin-bottom:1.5rem;">Entrez le mot de passe pour accéder à l'espace de gestion</p>
+    
+    <form onsubmit="verifierMotDePasse(event)">
+      <label for="mdp-admin">Mot de passe</label>
+      <input type="password" id="mdp-admin" placeholder="Entrez le mot de passe..." required>
+      <div id="erreur-mdp" class="message erreur" style="display:none; margin-top:0.5rem;">
+        ❌ Mot de passe incorrect. Veuillez réessayer.
+      </div>
+      <button type="submit" style="width:100%; margin-top:0.5rem;">Se connecter</button>
+    </form>
+  </div>
+
+  <!-- === ESPACE ADMINISTRATEUR === -->
+  <div id="section-admin" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+      <h2 class="titre-section" style="margin:0; text-align:left;">⚙️ Tableau de bord — Administration</h2>
+      <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
+    </div>
+
+    <!-- Onglets -->
+    <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid #E2E8F0; padding-bottom:0.5rem; flex-wrap:wrap;">
+      <button class="onglet actif" onclick="afficherOnglet('suggestions')" id="btn-suggestions">💬 Suggestions & Commentaires</button>
+      <button class="onglet" onclick="afficherOnglet('dons')" id="btn-dons">💰 Suivi des Dons</button>
+    </div>
+
+    <!-- === ONGLET SUGGESTIONS === -->
+    <div id="onglet-suggestions">
+      <h3>Suggestions citoyennes en attente</h3>
+      <p style="color:#718096; margin-bottom:1rem;">Cliquez sur ✅ Approuver pour publier ou ❌ Supprimer pour rejeter.</p>
+      
+      <table class="tableau-admin" style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden;">
+        <thead>
+          <tr style="background:#F4F6F8;">
+            <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Nom</th>
+            <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Contact</th>
+            <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Message</th>
+            <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Date</th>
+            <th style="padding:0.8rem; text-align:center; border-bottom:2px solid #E2E8F0;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="table-suggestions">
+          <tr>
+            <td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Chargement...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- === ONGLET DONS === -->
+    <div id="onglet-dons" style="display:none;">
+      <h3>Suivi des dons reçus</h3>
+      <p style="color:#718096; margin-bottom:1rem;">Enregistrez et consultez ici les contributions reçues.</p>
+      
+      <div style="background:#F4F6F8; padding:1.5rem; border-radius:6px; margin-bottom:1.5rem;">
+        <h4 style="margin-bottom:1rem;">➕ Enregistrer un nouveau don</h4>
+        <form id="form-don">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div>
+              <label>Nom du donateur</label>
+              <input type="text" id="don-nom" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
+            </div>
+            <div>
+              <label>Montant (USD)</label>
+              <input type="number" id="don-montant" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
+            </div>
+            <div>
+              <label>Mode de paiement</label>
+              <select id="don-mode" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
+                <option value="Airtel Money">Airtel Money</option>
+                <option value="Versement bancaire">Versement bancaire</option>
+                <option value="Espèces">Espèces</option>
+                <option value="Autre">Autre</option>
+              </select>
+            </div>
+            <div>
+              <label>Date</label>
+              <input type="date" id="don-date" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
+            </div>
+          </div>
+          <button type="submit" style="margin-top:1rem;">Enregistrer le don</button>
+        </form>
+      </div>
+
+      <table class="tableau-admin" style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden;">
+        <thead>
+          <tr style="background:#F4F6F8;">
+            <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Date</th>
+            <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Donateur</th>
+            <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Montant</th>
+            <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Mode</th>
+            <th style="padding:0.8rem; text-align:center; border-bottom:2px solid #E2E8F0;">Reçu</th>
+          </tr>
+        </thead>
+        <tbody id="table-dons">
+          <tr>
+            <td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Chargement...</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div style="margin-top:2rem; padding:1.5rem; background:#E8F8F0; border-radius:6px;">
+        <h4>📊 Total collecté</h4>
+        <p style="font-size:1.8rem; font-weight:700; color:#27AE60; margin-top:0.5rem;" id="total-dons">0 USD</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-contenu">
+    <div class="footer-col">
+      <h4>Fondation Paluku</h4>
+      <p>Siwako Makuké Kapako<br>Au service du peuple de Lubero</p>
+    </div>
+    <div class="footer-col">
+      <h4>Liens rapides</h4>
+      <a href="index.html">Accueil</a>
+      <a href="projets.html">Nos Projets</a>
+      <a href="realisations.html">Réalisations</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Informations</h4>
+      <a href="vie-politique.html">Vie Politique</a>
+      <a href="faire-un-don.html">Faire un Don</a>
+      <a href="admin.html">Administration</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +243 82 XX XX XX XX<br>✉️ contact@fondationpaluku.cd</p>
+    </div>
+  </div>
+  <div class="footer-bas">
+    © 2026 Fondation Paluku Siwako Makuké Kapako — Tous droits réservés
+  </div>
+</footer>
+
+<!-- ✅ DANS CET ORDRE EXACT -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.min.js"></script>
+<script src="firebase-config.js"></script>
+
+<script>
     const MOT_DE_PASSE_ADMIN = 'admin2026';
 
-    // Vérification du mot de passe
     function verifierMotDePasse(e) {
       e.preventDefault();
       const saisi = document.getElementById('mdp-admin').value;
@@ -217,14 +240,12 @@
       }
     }
 
-    // Déconnexion
     function deconnexion() {
       document.getElementById('section-login').style.display = 'block';
       document.getElementById('section-admin').style.display = 'none';
       document.getElementById('mdp-admin').value = '';
     }
 
-    // Changement d'onglet
     function afficherOnglet(nom) {
       document.querySelectorAll('[id^="onglet-"]').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.onglet').forEach(el => el.classList.remove('actif'));
@@ -235,9 +256,13 @@
       if (nom === 'suggestions') chargerSuggestions();
     }
 
-    // === SUGGESTIONS ===
     async function chargerSuggestions() {
       const tbody = document.getElementById('table-suggestions');
+      
+      if (!window.db) {
+        tbody.innerHTML = '<tr><td colspan="5" style="color:red; text-align:center;">❌ Erreur: Firebase non connecté — vérifiez firebase-config.js</td></tr>';
+        return;
+      }
       
       try {
         const snapshot = await db.collection('suggestions')
@@ -289,7 +314,6 @@
       }
     }
 
-    // === DONS ===
     document.addEventListener('submit', function(e) {
       if (e.target.id === 'form-don') {
         e.preventDefault();
@@ -298,6 +322,11 @@
     });
 
     async function enregistrerDon() {
+      if (!window.db) {
+        alert("Erreur: Firebase non connecté");
+        return;
+      }
+      
       const nom = document.getElementById('don-nom').value;
       const montant = parseFloat(document.getElementById('don-montant').value);
       const mode = document.getElementById('don-mode').value;
@@ -322,6 +351,12 @@
     async function chargerDons() {
       const tbody = document.getElementById('table-dons');
       const totalEl = document.getElementById('total-dons');
+      
+      if (!window.db) {
+        tbody.innerHTML = '<tr><td colspan="5" style="color:red; text-align:center;">❌ Erreur: Firebase non connecté</td></tr>';
+        totalEl.textContent = 'Erreur';
+        return;
+      }
       
       try {
         const snapshot = await db.collection('dons')
@@ -355,8 +390,7 @@
         console.error("Erreur chargement dons:", erreur);
       }
     }
-  </script>
+</script>
 
 </body>
 </html>
-
