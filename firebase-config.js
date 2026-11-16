@@ -8,9 +8,7 @@ const firebaseConfig = {
   appId: "1:132602039423:web:7547231de610c2430a4"
 };
 
-// Initialiser Firebase
-if (!firebase.apps.length) {
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
+  window.db = firebase.firestore();
 }
-window.db = firebase.firestore();
-
