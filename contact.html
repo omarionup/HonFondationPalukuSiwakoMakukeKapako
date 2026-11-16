@@ -17,8 +17,6 @@
   <div class="contenu-actualites">
     <span class="item-actu">📢 Bienvenue sur le site officiel de la Fondation Paluku Siwako Makuké Kapako — Au service du peuple de Lubero !</span>
     <span class="item-actu">📍 Prochaine mission : Rencontre communautaire à Lubero-centre — 15 novembre 2026</span>
-    <span class="item-actu">📚 Campagne de distribution de kits scolaires en cours — Merci à nos donateurs !</span>
-    <span class="item-actu">💬 Envoyez vos suggestions via notre page Contact — Votre voix compte !</span>
   </div>
 </div>
 
@@ -46,7 +44,7 @@
 
 <main>
   <h2 class="titre-section">Nous Contacter</h2>
-  <p style="text-align:center; max-width:700px; margin:0 auto 3rem;">Votre voix compte. Partagez vos suggestions, vos préoccupations ou vos questions — nous vous répondrons dans les meilleurs délais.</p>
+  <p style="text-align:center; max-width:700px; margin:0 auto 3rem;">Votre voix compte. Partagez vos suggestions...</p>
 
   <div class="grille-2">
     <div class="carte">
@@ -72,10 +70,10 @@
         <button type="submit">Envoyer le message</button>
         
         <div id="message-confirmation" class="message succes" style="display:none; margin-top:1rem;">
-          ✅ Merci ! Votre message a été envoyé avec succès. Il sera examiné par notre équipe et publié dans la section citoyens s'il est approuvé.
+          ✅ Merci ! Votre message a été envoyé avec succès.
         </div>
         <div id="message-erreur" class="message erreur" style="display:none; margin-top:1rem;">
-          ❌ Erreur lors de l'envoi. Veuillez réessayer plus tard.
+          ❌ Erreur : <span id="texte-erreur"></span>
         </div>
       </form>
     </div>
@@ -84,20 +82,14 @@
       <div class="carte">
         <h3>📍 Nos Coordonnées</h3>
         <p><strong>Siège :</strong><br>Lubero-centre, Territoire de Lubero<br>Province du Nord-Kivu<br>République Démocratique du Congo</p>
-        
-        <p style="margin-top:1rem;"><strong>Heures de bureau :</strong><br>Lundi — Vendredi : 8h00 — 16h00<br>Samedi : 9h00 — 13h00</p>
-        
-        <p style="margin-top:1rem;"><strong>Téléphone :</strong><br>📞 +243 82 XX XX XX XX<br>📞 +243 81 XX XX XX XX</p>
-        
-        <p style="margin-top:1rem;"><strong>Email :</strong><br>✉️ contact@fondationpaluku.cd<br>✉️ info@fondationpaluku.cd</p>
+        <p style="margin-top:1rem;"><strong>Téléphone :</strong><br>📞 +243 82 XX XX XX XX</p>
+        <p style="margin-top:1rem;"><strong>Email :</strong><br>✉️ contact@fondationpaluku.cd</p>
       </div>
       
       <div class="carte" style="margin-top:1.5rem;">
         <h3>💬 Paroles de Citoyens</h3>
-        <p>Les suggestions et messages approuvés apparaissent ici :</p>
-        <div id="liste-suggestions">
-          <p style="color:#718096; font-style:italic;">Chargement...</p>
-        </div>
+        <p>Les messages approuvés apparaissent ici :</p>
+        <div id="liste-suggestions"><p style="color:#718096;">Chargement...</p></div>
       </div>
     </div>
   </div>
@@ -113,31 +105,25 @@
       <h4>Liens rapides</h4>
       <a href="index.html">Accueil</a>
       <a href="projets.html">Nos Projets</a>
-      <a href="realisations.html">Réalisations</a>
       <a href="contact.html">Contact</a>
     </div>
     <div class="footer-col">
       <h4>Informations</h4>
-      <a href="vie-politique.html">Vie Politique</a>
       <a href="faire-un-don.html">Faire un Don</a>
       <a href="admin.html">Administration</a>
     </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +243 82 XX XX XX XX<br>✉️ contact@fondationpaluku.cd</p>
-    </div>
   </div>
   <div class="footer-bas">
-    © 2026 Fondation Paluku Siwako Makuké Kapako — Tous droits réservés
+    © 2026 Fondation Paluku — Tous droits réservés
   </div>
 </footer>
 
-<!-- Firebase -->
+<!-- ÉTAPE 1 : Charger Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.min.js"></script>
 
+<!-- ÉTAPE 2 : Créer db UNE SEULE FOIS -->
 <script>
-// ===== CONFIGURATION FIREBASE =====
 const firebaseConfig = {
   apiKey: "AIzaSyBYXvIVNgII2OSb9nky-pSADQTYI6tEv8g",
   authDomain: "fondation-paluku.firebaseapp.com",
@@ -146,18 +132,18 @@ const firebaseConfig = {
   messagingSenderId: "132602039423",
   appId: "1:132602039423:web:7547231de610c2430a4"
 };
-
-// Initialiser Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-console.log("✅ Firebase connecté !");
+console.log("✅ Firebase prêt !");
 </script>
 
+<!-- ÉTAPE 3 : Utiliser db DANS CETTE BALISE SEULEMENT -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const formContact = document.getElementById('form-contact');
   const confirmation = document.getElementById('message-confirmation');
   const erreur = document.getElementById('message-erreur');
+  const texteErreur = document.getElementById('texte-erreur');
   
   if (formContact) {
     formContact.addEventListener('submit', async function(e) {
@@ -184,14 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         confirmation.style.display = 'block';
         formContact.reset();
-        
-        setTimeout(() => {
-          confirmation.style.display = 'none';
-        }, 8000);
+        setTimeout(() => confirmation.style.display = 'none', 8000);
       } catch (err) {
         erreur.style.display = 'block';
+        texteErreur.textContent = err.message;
         console.error("Erreur:", err);
-        alert("Détail de l'erreur : " + err.message);
       }
     });
   }
@@ -211,7 +194,7 @@ async function chargerSuggestionsPubliques() {
       .get();
     
     if (snapshot.empty) {
-      liste.innerHTML = '<p style="color:#718096; font-style:italic;">Aucune suggestion publiée pour le moment. Soyez le premier à partager la vôtre !</p>';
+      liste.innerHTML = '<p style="color:#718096; font-style:italic;">Aucune suggestion publiée pour le moment.</p>';
       return;
     }
     
