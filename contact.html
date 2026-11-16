@@ -51,12 +51,12 @@
     <div class="carte">
       <h3>📩 Envoyer un message ou une suggestion</h3>
       
-      <!-- ✅ Message de confirmation qui s'affiche après envoi -->
+      <!-- Message de confirmation après envoi -->
       <div id="message-reussi" style="display:none; color:green; padding:1rem; background:#E8F8F0; border-radius:4px; margin-bottom:1rem;">
         ✅ Merci ! Votre message a été envoyé avec succès. Il sera lu et publié si approuvé.
       </div>
       
-      <!-- ✅ Formulaire SIMPLE — fonctionne sans erreur CORS -->
+      <!-- Formulaire d'envoi -->
       <form action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST">
         <label for="Nom">Votre nom complet *</label>
         <input type="text" id="Nom" name="Nom" required placeholder="Ex: Jean Mulenda">
@@ -67,7 +67,7 @@
         <label for="Message">Votre message *</label>
         <textarea id="Message" name="Message" rows="6" required placeholder="Écrivez votre message ici..."></textarea>
         
-        <!-- Champs cachés automatiques -->
+        <!-- Champs automatiques -->
         <input type="hidden" name="Date" id="champ-date">
         <input type="hidden" name="Statut" value="En attente">
         <input type="hidden" name="redirect" value="https://omarionup.github.io/HonFondationPalukuSiwakoMakukéKapako/contact.html">
@@ -132,7 +132,7 @@
 // Date du jour automatique
 document.getElementById('champ-date').value = new Date().toLocaleDateString('fr-FR');
 
-// ✅ Afficher message de remerciement après retour de SheetDB
+// Afficher message de remerciement après envoi
 if (window.location.search.includes('success')) {
   document.getElementById('message-reussi').style.display = 'block';
   setTimeout(() => {
@@ -141,18 +141,17 @@ if (window.location.search.includes('success')) {
   }, 8000);
 }
 
-// Charger et afficher LES MESSAGES APPROUVÉS SEULEMENT
+// Charger et afficher uniquement les messages approuvés
 const LIEN_SHEETDB = "https://sheetdb.io/api/v1/r8w4zccs5agk4";
 
 async function chargerMessagesApprouves() {
   const conteneur = document.getElementById('liste-citoyens');
   
   try {
-    // Récupère TOUS les messages
     const reponse = await fetch(LIEN_SHEETDB);
     const tousLesMessages = await reponse.json();
     
-    // ✅ FILTRE : GARDE SEULEMENT CEUX QUI SONT "Approuvé"
+    // Garde seulement les messages avec statut exactement "Approuvé"
     const messagesFiltres = tousLesMessages.filter(msg => {
       const statutNettoye = (msg.Statut || "").trim();
       return statutNettoye === "Approuvé";
