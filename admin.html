@@ -11,11 +11,11 @@
     .btn-sheet { background:#0A3D62; color:white; border:none; padding:0.7rem 1.2rem; border-radius:4px; cursor:pointer; font-size:1rem; display:inline-block; text-decoration:none; margin-bottom:1.5rem; }
     .statut-en-attente { color:#F59E0B; font-weight:600; }
     .statut-approuve { color:#27AE60; font-weight:600; }
-    .btn-approuver { background:#27AE60; color:white; border:none; padding:0.4rem 0.8rem; border-radius:4px; cursor:pointer; margin-right:0.5rem; font-size:0.9rem; }
-    .btn-supprimer { background:#E74C3C; color:white; border:none; padding:0.4rem 0.8rem; border-radius:4px; cursor:pointer; font-size:0.9rem; }
+    .btn-approuver { background:#27AE60; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; margin-right:0.5rem; font-size:0.95rem; }
+    .btn-supprimer { background:#E74C3C; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; font-size:0.95rem; }
     .btn-approuver:hover { background:#219653; }
     .btn-supprimer:hover { background:#c0392b; }
-    .actions-buttons { margin-top:0.7rem; }
+    .actions-buttons { margin-top:0.8rem; }
   </style>
 </head>
 <body>
@@ -150,7 +150,7 @@ async function chargerEnAttente() {
     const reponse = await fetch(LIEN_SHEETDB);
     const tousLesMessages = await reponse.json();
     
-    // Garde les messages dont le statut n'est PAS "Approuvé"
+    // Filtrer : afficher ceux qui ne sont PAS "Approuvé"
     const messagesEnAttente = tousLesMessages.filter(msg => {
       const statut = (msg.Statut || "").trim();
       return statut !== "Approuvé";
@@ -163,16 +163,18 @@ async function chargerEnAttente() {
     
     conteneur.innerHTML = '';
     messagesEnAttente.forEach((msg, index) => {
-      const ligneIndex = tousLesMessages.findIndex(m => m === msg) + 1; // +1 car l'en-tête est la ligne 1
+      // Calcul du numéro de ligne dans SheetDB
+      const ligneSheetDB = index + 2; // +2 car SheetDB compte l'en-tête comme ligne 1
+      
       conteneur.innerHTML += `
-        <div class="message-en-attente" data-index="${ligneIndex}">
+        <div class="message-en-attente">
           <strong>${msg.Nom}</strong> — <small>${msg.Contact}</small>
           <span class="statut-en-attente" style="float:right;">⏳ En attente</span>
           <p style="margin:0.5rem 0;">${msg.Message}</p>
           <small style="color:#718096;">📅 ${msg.Date}</small>
           <div class="actions-buttons">
-            <button class="btn-approuver" onclick="approuverMessage(${ligneIndex})">✅ Approuver</button>
-            <button class="btn-supprimer" onclick="supprimerMessage(${ligneIndex})">🗑️ Supprimer</button>
+            <button class="btn-approuver" onclick="approuverMessage(${ligneSheetDB})">✅ Approuver</button>
+            <button class="btn-supprimer" onclick="supprimerMessage(${ligneSheetDB})">🗑️ Supprimer</button>
           </div>
         </div>
       `;
@@ -215,45 +217,38 @@ async function chargerApprouves() {
   }
 }
 
-// ✅ Fonction : Approuver un message
+// ✅ Approuver un message
 async function approuverMessage(ligneNumero) {
   if (!confirm("Êtes-vous sûr de vouloir approuver ce message ?")) return;
   
   try {
-    // Mise à jour dans SheetDB : remplace le Statut par "Approuvé"
     const reponse = await fetch(`${LIEN_SHEETDB}/${ligneNumero}`, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        Statut: "Approuvé"
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ Statut: "Approuvé" })
     });
     
     if (reponse.ok) {
-      alert("✅ Message approuvé ! Il est maintenant visible sur le site.");
-      chargerTout(); // Recharge les listes
+      alert("✅ Message approuvé !");
+      chargerTout();
     } else {
-      alert("❌ Erreur lors de l'approbation");
+      alert("❌ Erreur : vérifiez que SheetDB est en mode Écriture");
     }
   } catch (erreur) {
     alert("❌ Erreur : " + erreur.message);
   }
 }
 
-// 🗑️ Fonction : Supprimer un message
+// 🗑️ Supprimer un message
 async function supprimerMessage(ligneNumero) {
-  if (!confirm("⚠️ Êtes-vous sûr de vouloir SUPPRIMER ce message ? Cette action est irréversible !")) return;
+  if (!confirm("⚠️ Supprimer définitivement ce message ?")) return;
   
   try {
-    const reponse = await fetch(`${LIEN_SHEETDB}/${ligneNumero}`, {
-      method: 'DELETE'
-    });
+    const reponse = await fetch(`${LIEN_SHEETDB}/${ligneNumero}`, { method: 'DELETE' });
     
     if (reponse.ok) {
-      alert("🗑️ Message supprimé définitivement.");
-      chargerTout(); // Recharge les listes
+      alert("🗑️ Message supprimé !");
+      chargerTout();
     } else {
       alert("❌ Erreur lors de la suppression");
     }
