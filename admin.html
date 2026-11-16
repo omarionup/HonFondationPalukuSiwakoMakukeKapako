@@ -6,12 +6,14 @@
   <title>Espace Administrateur — Fondation Paluku</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .onglet { background: transparent; border: none; padding: 0.6rem 1.2rem; font-size: 0.95rem; cursor: pointer; border-bottom: 3px solid transparent; color: #718096; }
-    .onglet.actif { border-bottom-color: #0A3D62; color: #0A3D62; font-weight: 600; }
-    .onglet:hover { color: #0A3D62; }
-    .bouton-voir { background: #27AE60; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; margin-right: 0.3rem; font-size: 0.85rem; }
-    .bouton-suppr { background: #E74C3C; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
-    input, select { box-sizing: border-box; }
+    .carte-admin { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin-bottom:1.5rem; }
+    .message-en-attente { border-left:4px solid #F59E0B; padding:1rem; margin-bottom:1rem; background:#FFFBEB; border-radius:4px; }
+    .btn-approuver { background:#27AE60; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; margin-right:0.5rem; }
+    .btn-refuser { background:#E74C3C; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; }
+    .btn-sheet { background:#0A3D62; color:white; border:none; padding:0.7rem 1.2rem; border-radius:4px; cursor:pointer; font-size:1rem; display:inline-block; text-decoration:none; margin-bottom:1.5rem; }
+    .statut-en-attente { color:#F59E0B; font-weight:600; }
+    .statut-approuve { color:#27AE60; font-weight:600; }
+    .statut-refuse { color:#E74C3C; font-weight:600; }
   </style>
 </head>
 <body>
@@ -36,89 +38,54 @@
         <p>Siwako Makuké Kapako — Administration</p>
       </div>
     </div>
-    <nav><ul><li><a href="index.html">← Retour au site</a></li></ul></nav>
+    <nav>
+      <ul>
+        <li><a href="index.html">← Retour au site</a></li>
+      </ul>
+    </nav>
   </div>
 </header>
 
 <main>
-  <!-- Connexion -->
+  <!-- === PAGE DE CONNEXION === -->
   <div id="section-login" style="max-width:420px; margin:4rem auto; padding:2rem; background:#fff; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
     <h2 style="text-align:center; color:#0A3D62; margin-bottom:1.5rem;">🔐 Connexion Administrateur</h2>
+    <p style="text-align:center; color:#718096; margin-bottom:1.5rem;">Entrez le mot de passe pour accéder à l'espace de gestion</p>
+    
     <form onsubmit="verifierMotDePasse(event)">
       <label for="mdp-admin">Mot de passe</label>
-      <input type="password" id="mdp-admin" placeholder="Entrez le mot de passe..." required>
-      <div id="erreur-mdp" style="display:none; color:red; margin-top:0.5rem;">❌ Mot de passe incorrect</div>
-      <button type="submit" style="width:100%; margin-top:0.5rem;">Se connecter</button>
+      <input type="password" id="mdp-admin" placeholder="Entrez le mot de passe..." required style="width:100%; padding:0.7rem; margin:0.5rem 0 1rem 0; border:1px solid #ddd; border-radius:4px;">
+      <div id="erreur-mdp" style="display:none; color:red; margin-bottom:1rem;">❌ Mot de passe incorrect</div>
+      <button type="submit" style="width:100%;">Se connecter</button>
     </form>
   </div>
 
-  <!-- Admin -->
-  <div id="section-admin" style="display:none;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-      <h2 class="titre-section" style="margin:0;">⚙️ Tableau de bord</h2>
+  <!-- === ESPACE ADMINISTRATEUR === -->
+  <div id="section-admin" style="display:none; max-width:900px; margin:0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+      <h2 class="titre-section" style="margin:0; text-align:left;">⚙️ Tableau de bord — Administration</h2>
       <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
     </div>
 
-    <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid #E2E8F0; padding-bottom:0.5rem;">
-      <button class="onglet actif" onclick="afficherOnglet('suggestions')" id="btn-suggestions">💬 Suggestions</button>
-      <button class="onglet" onclick="afficherOnglet('dons')" id="btn-dons">💰 Dons</button>
-    </div>
+    <!-- Lien direct vers Google Sheet -->
+    <a href="https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_LIEN_DE_TON_TABLEAU" target="_blank" class="btn-sheet">
+      📊 Ouvrir mon tableau Google Sheets ↗️
+    </a>
+    <p style="color:#718096; margin:-0.8rem 0 1.5rem 0; font-size:0.9rem;">Cliquez pour modifier le statut d'un message : remplacez "En attente" par "Approuvé" pour publier</p>
 
-    <!-- Suggestions -->
-    <div id="onglet-suggestions">
-      <h3>Suggestions en attente</h3>
-      <table style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden;">
-        <thead><tr style="background:#F4F6F8;">
-          <th style="padding:0.8rem; text-align:left;">Nom</th>
-          <th style="padding:0.8rem; text-align:left;">Contact</th>
-          <th style="padding:0.8rem; text-align:left;">Message</th>
-          <th style="padding:0.8rem; text-align:left;">Date</th>
-          <th style="padding:0.8rem; text-align:center;">Actions</th>
-        </tr></thead>
-        <tbody id="table-suggestions">
-          <tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Chargement...</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Dons -->
-    <div id="onglet-dons" style="display:none;">
-      <h3>Suivi des dons</h3>
-      <div style="background:#F4F6F8; padding:1.5rem; border-radius:6px; margin-bottom:1.5rem;">
-        <h4 style="margin-bottom:1rem;">➕ Enregistrer un don</h4>
-        <form id="form-don">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-            <div><label>Nom</label><input type="text" id="don-nom" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;"></div>
-            <div><label>Montant (USD)</label><input type="number" id="don-montant" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;"></div>
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:0.5rem;">
-            <div><label>Mode</label>
-              <select id="don-mode" style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
-                <option value="Airtel Money">Airtel Money</option>
-                <option value="Versement bancaire">Versement bancaire</option>
-                <option value="Espèces">Espèces</option>
-              </select>
-            </div>
-            <div><label>Date</label><input type="date" id="don-date" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;"></div>
-          </div>
-          <button type="submit" style="margin-top:1rem;">Enregistrer</button>
-        </form>
+    <!-- Messages en attente -->
+    <div class="carte-admin">
+      <h3>📬 Messages en attente de validation</h3>
+      <div id="liste-en-attente">
+        <p style="color:#718096; font-style:italic;">Chargement...</p>
       </div>
-      
-      <table style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px;">
-        <thead><tr style="background:#F4F6F8;">
-          <th style="padding:0.8rem; text-align:left;">Date</th>
-          <th style="padding:0.8rem; text-align:left;">Donateur</th>
-          <th style="padding:0.8rem; text-align:left;">Montant</th>
-          <th style="padding:0.8rem; text-align:left;">Mode</th>
-        </tr></thead>
-        <tbody id="table-dons">
-          <tr><td colspan="4" style="text-align:center; padding:2rem; color:#718096;">Chargement...</td></tr>
-        </tbody>
-      </table>
-      <div style="margin-top:2rem; padding:1.5rem; background:#E8F8F0; border-radius:6px;">
-        <h4>📊 Total collecté</h4>
-        <p style="font-size:1.8rem; font-weight:700; color:#27AE60; margin-top:0.5rem;" id="total-dons">0 USD</p>
+    </div>
+
+    <!-- Messages approuvés -->
+    <div class="carte-admin">
+      <h3>✅ Messages déjà publiés</h3>
+      <div id="liste-approuves">
+        <p style="color:#718096; font-style:italic;">Chargement...</p>
       </div>
     </div>
   </div>
@@ -139,36 +106,17 @@
     <div class="footer-col">
       <h4>Informations</h4>
       <a href="faire-un-don.html">Faire un Don</a>
-      <a href="admin.html">Administration</a>
+      <a href="admin-sheet.html">Administration</a>
     </div>
   </div>
   <div class="footer-bas">
-    © 2026 Fondation Paluku — Tous droits réservés
+    © 2026 Fondation Paluku Siwako Makuké Kapako — Tous droits réservés
   </div>
 </footer>
 
-<!-- ÉTAPE 1 : Charger Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.min.js"></script>
-
-<!-- ÉTAPE 2 : Initialiser Firebase et créer db -->
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBYXvIVNgII2OSb9nky-pSADQTYI6tEv8g",
-  authDomain: "fondation-paluku.firebaseapp.com",
-  projectId: "fondation-paluku",
-  storageBucket: "fondation-paluku.appspot.com",
-  messagingSenderId: "132602039423",
-  appId: "1:132602039423:web:7547231de610c2430a4"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-console.log("✅ Firebase connecté !");
-</script>
-
-<!-- ÉTAPE 3 : Utiliser db ICI SEULEMENT -->
 <script>
 const MOT_DE_PASSE_ADMIN = 'admin2026';
+const LIEN_SHEETDB = "https://sheetdb.io/api/v1/r8w4zccs5agk4";
 
 function verifierMotDePasse(e) {
   e.preventDefault();
@@ -177,8 +125,7 @@ function verifierMotDePasse(e) {
     document.getElementById('section-login').style.display = 'none';
     document.getElementById('section-admin').style.display = 'block';
     document.getElementById('erreur-mdp').style.display = 'none';
-    chargerSuggestions();
-    chargerDons();
+    chargerTout();
   } else {
     document.getElementById('erreur-mdp').style.display = 'block';
   }
@@ -190,123 +137,68 @@ function deconnexion() {
   document.getElementById('mdp-admin').value = '';
 }
 
-function afficherOnglet(nom) {
-  document.querySelectorAll('[id^="onglet-"]').forEach(el => el.style.display = 'none');
-  document.querySelectorAll('.onglet').forEach(el => el.classList.remove('actif'));
-  document.getElementById('onglet-' + nom).style.display = 'block';
-  document.getElementById('btn-' + nom).classList.add('actif');
-  if (nom === 'dons') chargerDons();
-  if (nom === 'suggestions') chargerSuggestions();
+async function chargerTout() {
+  await Promise.all([
+    chargerEnAttente(),
+    chargerApprouves()
+  ]);
 }
 
-async function chargerSuggestions() {
-  const tbody = document.getElementById('table-suggestions');
+async function chargerEnAttente() {
+  const conteneur = document.getElementById('liste-en-attente');
   try {
-    const snapshot = await db.collection('suggestions')
-      .where('statut', '==', 'en-attente')
-      .orderBy('horodatage', 'desc')
-      .get();
+    const reponse = await fetch(LIEN_SHEETDB + '?search=Statut:En attente');
+    const messages = await reponse.json();
     
-    if (snapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucune suggestion en attente</td></tr>';
+    if (messages.length === 0) {
+      conteneur.innerHTML = '<p style="color:#718096; font-style:italic;">Aucun message en attente. 🎉</p>';
       return;
     }
     
-    tbody.innerHTML = '';
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      tbody.innerHTML += `
-        <tr>
-          <td>${data.nom}</td>
-          <td>${data.contact}</td>
-          <td style="max-width:200px;">${data.message.substring(0, 45)}...</td>
-          <td>${data.date}</td>
-          <td style="text-align:center;">
-            <button class="bouton-voir" onclick="approuverMessage('${doc.id}')">✅ Approuver</button>
-            <button class="bouton-suppr" onclick="supprimerMessage('${doc.id}')">❌ Supprimer</button>
-          </td>
-        </tr>
+    conteneur.innerHTML = '';
+    messages.forEach((msg, index) => {
+      conteneur.innerHTML += `
+        <div class="message-en-attente">
+          <strong>${msg.Nom}</strong> — <small>${msg.Contact}</small>
+          <span class="statut-en-attente" style="float:right;">⏳ En attente</span>
+          <p style="margin:0.5rem 0;">${msg.Message}</p>
+          <small style="color:#718096;">📅 ${msg.Date}</small>
+          <div style="margin-top:0.5rem;">
+            <span style="font-size:0.9rem; color:#0A3D62;">↗️ Ouvrez le tableau en haut pour changer le statut en "Approuvé"</span>
+          </div>
+        </div>
       `;
     });
   } catch (erreur) {
-    tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Erreur : ${erreur.message}</td></tr>`;
-    console.error("Erreur suggestions:", erreur);
+    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement</p>';
+    console.error(erreur);
   }
 }
 
-async function approuverMessage(id) {
-  if (confirm('✅ Publier ce message ?')) {
-    await db.collection('suggestions').doc(id).update({ statut: 'approuve' });
-    chargerSuggestions();
-  }
-}
-
-async function supprimerMessage(id) {
-  if (confirm('❌ Supprimer définitivement ?')) {
-    await db.collection('suggestions').doc(id).delete();
-    chargerSuggestions();
-  }
-}
-
-document.addEventListener('submit', e => {
-  if (e.target.id === 'form-don') {
-    e.preventDefault();
-    enregistrerDon();
-  }
-});
-
-async function enregistrerDon() {
-  const nom = document.getElementById('don-nom').value;
-  const montant = parseFloat(document.getElementById('don-montant').value);
-  const mode = document.getElementById('don-mode').value;
-  const date = document.getElementById('don-date').value;
-
+async function chargerApprouves() {
+  const conteneur = document.getElementById('liste-approuves');
   try {
-    await db.collection('dons').add({
-      nom, montant, mode, date,
-      horodatage: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    document.getElementById('form-don').reset();
-    chargerDons();
-    alert("✅ Don enregistré !");
-  } catch (erreur) {
-    alert("Erreur : " + erreur.message);
-  }
-}
-
-async function chargerDons() {
-  const tbody = document.getElementById('table-dons');
-  const totalEl = document.getElementById('total-dons');
-  
-  try {
-    const snapshot = await db.collection('dons')
-      .orderBy('horodatage', 'desc')
-      .get();
+    const reponse = await fetch(LIEN_SHEETDB + '?search=Statut:Approuvé');
+    const messages = await reponse.json();
     
-    if (snapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:2rem; color:#718096;">Aucun don enregistré</td></tr>';
-      totalEl.textContent = '0 USD';
+    if (messages.length === 0) {
+      conteneur.innerHTML = '<p style="color:#718096; font-style:italic;">Aucun message publié pour le moment.</p>';
       return;
     }
     
-    let total = 0;
-    tbody.innerHTML = '';
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      total += d.montant;
-      tbody.innerHTML += `
-        <tr>
-          <td>${d.date}</td>
-          <td>${d.nom}</td>
-          <td>${d.montant} USD</td>
-          <td>${d.mode}</td>
-        </tr>
+    conteneur.innerHTML = '';
+    messages.forEach(msg => {
+      conteneur.innerHTML += `
+        <div style="padding:0.8rem; background:#F0FDF4; border-radius:4px; margin-bottom:0.5rem; border-left:3px solid #27AE60;">
+          <strong>${msg.Nom}</strong> <small style="color:#718096;">— ${msg.Date}</small>
+          <span class="statut-approuve" style="float:right;">✅ Publié</span>
+          <p style="margin:0.3rem 0; font-style:italic;">"${msg.Message}"</p>
+        </div>
       `;
     });
-    totalEl.textContent = total + ' USD';
   } catch (erreur) {
-    tbody.innerHTML = `<tr><td colspan="4" style="color:red; text-align:center;">Erreur : ${erreur.message}</td></tr>`;
-    console.error("Erreur dons:", erreur);
+    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement</p>';
+    console.error(erreur);
   }
 }
 </script>
