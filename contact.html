@@ -17,6 +17,7 @@
   <div class="contenu-actualites">
     <span class="item-actu">📢 Bienvenue sur le site officiel de la Fondation Paluku Siwako Makuké Kapako — Au service du peuple de Lubero !</span>
     <span class="item-actu">📍 Prochaine mission : Rencontre communautaire à Lubero-centre — 15 novembre 2026</span>
+    <span class="item-actu">💬 Envoyez vos suggestions — votre voix compte !</span>
   </div>
 </div>
 
@@ -44,36 +45,32 @@
 
 <main>
   <h2 class="titre-section">Nous Contacter</h2>
-  <p style="text-align:center; max-width:700px; margin:0 auto 3rem;">Votre voix compte. Partagez vos suggestions...</p>
+  <p style="text-align:center; max-width:700px; margin:0 auto 3rem;">Votre voix compte. Partagez vos suggestions, vos préoccupations ou vos questions — nous vous répondrons dans les meilleurs délais.</p>
 
   <div class="grille-2">
     <div class="carte">
       <h3>📩 Envoyer un message ou une suggestion</h3>
-      <form id="form-contact">
+      
+      <form id="form-contact" action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST">
         <label for="nom">Votre nom complet *</label>
-        <input type="text" id="nom" required placeholder="Ex: Jean Mulenda">
+        <input type="text" id="nom" name="Nom" required placeholder="Ex: Jean Mulenda">
         
-        <label for="email">Votre email ou téléphone *</label>
-        <input type="text" id="email" required placeholder="votre@email.com ou +243 XX XX XX XX">
-        
-        <label for="sujet">Sujet</label>
-        <select id="sujet">
-          <option value="suggestion">Suggestion citoyenne</option>
-          <option value="question">Question sur nos projets</option>
-          <option value="partenariat">Proposition de partenariat</option>
-          <option value="autre">Autre demande</option>
-        </select>
+        <label for="contact">Email ou téléphone *</label>
+        <input type="text" id="contact" name="Contact" required placeholder="votre@email.com ou +243 XX XX XX XX">
         
         <label for="message">Votre message *</label>
-        <textarea id="message" rows="6" required placeholder="Écrivez votre message ici..."></textarea>
+        <textarea id="message" name="Message" rows="6" required placeholder="Écrivez votre message ici..."></textarea>
+        
+        <input type="hidden" name="Date" id="champ-date">
+        <input type="hidden" name="Statut" value="En attente">
         
         <button type="submit">Envoyer le message</button>
         
-        <div id="message-confirmation" class="message succes" style="display:none; margin-top:1rem;">
-          ✅ Merci ! Votre message a été envoyé avec succès.
+        <div id="msg-succes" style="display:none; color:green; margin-top:1rem; padding:0.8rem; background:#E8F8F0; border-radius:4px;">
+          ✅ Merci ! Votre message a été envoyé avec succès. Il sera lu et publié si approuvé.
         </div>
-        <div id="message-erreur" class="message erreur" style="display:none; margin-top:1rem;">
-          ❌ Erreur : <span id="texte-erreur"></span>
+        <div id="msg-erreur" style="display:none; color:red; margin-top:1rem; padding:0.8rem; background:#FEE; border-radius:4px;">
+          ❌ Erreur lors de l'envoi. Veuillez réessayer plus tard.
         </div>
       </form>
     </div>
@@ -82,14 +79,20 @@
       <div class="carte">
         <h3>📍 Nos Coordonnées</h3>
         <p><strong>Siège :</strong><br>Lubero-centre, Territoire de Lubero<br>Province du Nord-Kivu<br>République Démocratique du Congo</p>
-        <p style="margin-top:1rem;"><strong>Téléphone :</strong><br>📞 +243 82 XX XX XX XX</p>
-        <p style="margin-top:1rem;"><strong>Email :</strong><br>✉️ contact@fondationpaluku.cd</p>
+        
+        <p style="margin-top:1rem;"><strong>Heures de bureau :</strong><br>Lundi — Vendredi : 8h00 — 16h00<br>Samedi : 9h00 — 13h00</p>
+        
+        <p style="margin-top:1rem;"><strong>Téléphone :</strong><br>📞 +243 82 XX XX XX XX<br>📞 +243 81 XX XX XX XX</p>
+        
+        <p style="margin-top:1rem;"><strong>Email :</strong><br>✉️ contact@fondationpaluku.cd<br>✉️ info@fondationpaluku.cd</p>
       </div>
       
       <div class="carte" style="margin-top:1.5rem;">
         <h3>💬 Paroles de Citoyens</h3>
         <p>Les messages approuvés apparaissent ici :</p>
-        <div id="liste-suggestions"><p style="color:#718096;">Chargement...</p></div>
+        <div id="liste-citoyens">
+          <p style="color:#718096; font-style:italic;">Chargement des messages...</p>
+        </div>
       </div>
     </div>
   </div>
@@ -105,114 +108,88 @@
       <h4>Liens rapides</h4>
       <a href="index.html">Accueil</a>
       <a href="projets.html">Nos Projets</a>
+      <a href="realisations.html">Réalisations</a>
       <a href="contact.html">Contact</a>
     </div>
     <div class="footer-col">
       <h4>Informations</h4>
+      <a href="vie-politique.html">Vie Politique</a>
       <a href="faire-un-don.html">Faire un Don</a>
-      <a href="admin.html">Administration</a>
+      <a href="admin-sheet.html">Administration</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +243 82 XX XX XX XX<br>✉️ contact@fondationpaluku.cd</p>
     </div>
   </div>
   <div class="footer-bas">
-    © 2026 Fondation Paluku — Tous droits réservés
+    © 2026 Fondation Paluku Siwako Makuké Kapako — Tous droits réservés
   </div>
 </footer>
 
-<!-- ÉTAPE 1 : Charger Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.min.js"></script>
-
-<!-- ÉTAPE 2 : Créer db UNE SEULE FOIS -->
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBYXvIVNgII2OSb9nky-pSADQTYI6tEv8g",
-  authDomain: "fondation-paluku.firebaseapp.com",
-  projectId: "fondation-paluku",
-  storageBucket: "fondation-paluku.appspot.com",
-  messagingSenderId: "132602039423",
-  appId: "1:132602039423:web:7547231de610c2430a4"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-console.log("✅ Firebase prêt !");
-</script>
+// Date du jour automatique
+document.getElementById('champ-date').value = new Date().toLocaleDateString('fr-FR');
 
-<!-- ÉTAPE 3 : Utiliser db DANS CETTE BALISE SEULEMENT -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const formContact = document.getElementById('form-contact');
-  const confirmation = document.getElementById('message-confirmation');
-  const erreur = document.getElementById('message-erreur');
-  const texteErreur = document.getElementById('texte-erreur');
+// Envoyer le formulaire
+const form = document.getElementById('form-contact');
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
   
-  if (formContact) {
-    formContact.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const nom = document.getElementById('nom').value;
-      const contact = document.getElementById('email').value;
-      const sujet = document.getElementById('sujet').value;
-      const message = document.getElementById('message').value;
-      
-      confirmation.style.display = 'none';
-      erreur.style.display = 'none';
-      
-      try {
-        await db.collection('suggestions').add({
-          nom: nom,
-          contact: contact,
-          sujet: sujet,
-          message: message,
-          date: new Date().toLocaleDateString('fr-FR'),
-          statut: 'en-attente',
-          horodatage: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        
-        confirmation.style.display = 'block';
-        formContact.reset();
-        setTimeout(() => confirmation.style.display = 'none', 8000);
-      } catch (err) {
-        erreur.style.display = 'block';
-        texteErreur.textContent = err.message;
-        console.error("Erreur:", err);
-      }
-    });
-  }
-  
-  chargerSuggestionsPubliques();
-});
-
-async function chargerSuggestionsPubliques() {
-  const liste = document.getElementById('liste-suggestions');
-  if (!liste) return;
+  const url = form.action;
+  const formData = new FormData(form);
   
   try {
-    const snapshot = await db.collection('suggestions')
-      .where('statut', '==', 'approuve')
-      .orderBy('horodatage', 'desc')
-      .limit(10)
-      .get();
+    const reponse = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
     
-    if (snapshot.empty) {
-      liste.innerHTML = '<p style="color:#718096; font-style:italic;">Aucune suggestion publiée pour le moment.</p>';
+    if (reponse.ok) {
+      document.getElementById('msg-succes').style.display = 'block';
+      document.getElementById('msg-erreur').style.display = 'none';
+      form.reset();
+      document.getElementById('champ-date').value = new Date().toLocaleDateString('fr-FR');
+    } else {
+      throw new Error("Erreur serveur");
+    }
+  } catch(err) {
+    document.getElementById('msg-erreur').style.display = 'block';
+    console.error(err);
+  }
+});
+
+// Charger et afficher les messages APPROUVÉS
+const LIEN_SHEETDB = "https://sheetdb.io/api/v1/r8w4zccs5agk4";
+
+async function chargerMessagesApprouves() {
+  const conteneur = document.getElementById('liste-citoyens');
+  
+  try {
+    const reponse = await fetch(LIEN_SHEETDB + '?search=Statut:Approuvé');
+    const messages = await reponse.json();
+    
+    if (messages.length === 0) {
+      conteneur.innerHTML = '<p style="color:#718096; font-style:italic;">Aucun message approuvé pour le moment. Soyez le premier à partager la vôtre !</p>';
       return;
     }
     
-    liste.innerHTML = '';
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      liste.innerHTML += `
-        <div style="padding:0.8rem; background:#F4F6F8; border-radius:4px; margin-bottom:0.8rem;">
-          <strong>${data.nom}</strong> <small style="color:#718096;">— ${data.date}</small>
-          <p style="margin-top:0.4rem; font-style:italic;">"${data.message}"</p>
+    conteneur.innerHTML = '';
+    messages.forEach(msg => {
+      conteneur.innerHTML += `
+        <div style="padding:1rem; background:#F9FAFB; border-radius:6px; margin-bottom:0.8rem; border-left:3px solid #27AE60;">
+          <strong>${msg.Nom}</strong> <small style="color:#718096;">— ${msg.Date}</small>
+          <p style="margin:0.5rem 0 0 0; font-style:italic;">"${msg.Message}"</p>
         </div>
       `;
     });
-  } catch (err) {
-    liste.innerHTML = '<p style="color:red;">Erreur de chargement : ' + err.message + '</p>';
-    console.error("Erreur chargement:", err);
+  } catch (erreur) {
+    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement. Rafraîchissez la page.</p>';
+    console.error(erreur);
   }
 }
+
+chargerMessagesApprouves();
 </script>
 
 </body>
