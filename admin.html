@@ -64,8 +64,8 @@
       <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
     </div>
 
-    <!-- ⚠️ IMPORTANT : Remplacez le lien ci-dessous par celui de votre Google Sheet -->
-    <a href="https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_VOTRE_LIEN_GOOGLE_SHEET" target="_blank" class="btn-sheet">
+    <!-- ⚠️ REMPLACE CE LIEN PAR TON GOOGLE SHEET -->
+    <a href="https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_TON_LIEN_GOOGLE_SHEET" target="_blank" class="btn-sheet">
       📊 Ouvrir mon tableau Google Sheets ↗️
     </a>
     <p style="color:#718096; margin:-0.8rem 0 1.5rem 0; font-size:0.9rem;">Dans le tableau, remplacez "En attente" par "Approuvé" pour publier un message</p>
@@ -103,7 +103,7 @@
     <div class="footer-col">
       <h4>Informations</h4>
       <a href="faire-un-don.html">Faire un Don</a>
-      <a href="admin-sheet.html">Administration</a>
+      <a href="admin.html">Administration</a>
     </div>
   </div>
   <div class="footer-bas">
@@ -164,7 +164,7 @@ async function chargerEnAttente() {
       `;
     });
   } catch (erreur) {
-    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement : vérifiez votre lien SheetDB</p>';
+    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement — vérifiez votre lien SheetDB</p>';
     console.error(erreur);
   }
 }
