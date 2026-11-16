@@ -8,11 +8,24 @@
 </head>
 <body>
 
+<!-- ===== BARRE ALERTES ===== -->
+<div class="barre-alertes">
+  <div class="etiquette-alerte">
+    <span class="point-clignotant"></span>
+    ALERTES
+  </div>
+  <div class="contenu-actualites">
+    <span class="item-actu">📢 Bienvenue sur le site officiel de la Fondation Paluku Siwako Makuké Kapako — Au service du peuple de Lubero !</span>
+    <span class="item-actu">📍 Prochaine mission : Rencontre communautaire à Lubero-centre — 15 novembre 2026</span>
+    <span class="item-actu">📚 Campagne de distribution de kits scolaires en cours — Merci à nos donateurs !</span>
+    <span class="item-actu">💬 Envoyez vos suggestions via notre page Contact — Votre voix compte !</span>
+  </div>
+</div>
+
   <header>
     <div class="header-contenu">
       <div class="logo-conteneur">
-        <img src="logo.png" alt="Logo Fondation Paluku" class="logo">
-
+        <img src="images/logo.png" alt="Logo Fondation Paluku" class="logo">
         <div class="header-titre">
           <h1>Fondation Paluku</h1>
           <p>Siwako Makuké Kapako</p>
@@ -30,18 +43,7 @@
       </nav>
     </div>
   </header>
-<div class="barre-alertes">
-  <div class="etiquette-alerte">
-    <span class="point-clignotant"></span>
-    ALERTES
-  </div>
-  <div class="contenu-actualites">
-    <span class="item-actu">📢 Bienvenue sur le site officiel de la Fondation Paluku Siwako Makuké Kapako — Au service du peuple de Lubero !</span>
-    <span class="item-actu">📍 Prochaine mission : Rencontre communautaire à Lubero-centre — 15 novembre 2026</span>
-    <span class="item-actu">📚 Campagne de distribution de kits scolaires en cours — Merci à nos donateurs !</span>
-    <span class="item-actu">💬 Envoyez vos suggestions via notre page Contact — Votre voix compte !</span>
-  </div>
-</div>
+
   <main>
     <h2 class="titre-section">Nous Contacter</h2>
     <p style="text-align:center; max-width:700px; margin:0 auto 3rem;">Votre voix compte. Partagez vos suggestions, vos préoccupations ou vos questions — nous vous répondrons dans les meilleurs délais.</p>
@@ -69,8 +71,11 @@
           
           <button type="submit">Envoyer le message</button>
           
-          <div id="message-confirmation" class="message succes">
+          <div id="message-confirmation" class="message succes" style="display:none; margin-top:1rem;">
             ✅ Merci ! Votre message a été envoyé avec succès. Il sera examiné par notre équipe et publié dans la section citoyens s'il est approuvé.
+          </div>
+          <div id="message-erreur" class="message erreur" style="display:none; margin-top:1rem;">
+            ❌ Erreur lors de l'envoi. Veuillez réessayer plus tard.
           </div>
         </form>
       </div>
@@ -91,7 +96,7 @@
           <h3>💬 Paroles de Citoyens</h3>
           <p>Les suggestions et messages approuvés apparaissent ici :</p>
           <div id="liste-suggestions">
-            <p style="color:#718096; font-style:italic;">Aucune suggestion publiée pour le moment. Soyez le premier à partager la vôtre !</p>
+            <p style="color:#718096; font-style:italic;">Chargement...</p>
           </div>
         </div>
       </div>
@@ -119,7 +124,7 @@
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
-        <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +247 XXX XXX XXX<br>✉️ contact@fondationpaluku.cd</p>
+        <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +243 82 XX XX XX XX<br>✉️ contact@fondationpaluku.cd</p>
       </div>
     </div>
     <div class="footer-bas">
@@ -127,6 +132,88 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.min.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const formContact = document.getElementById('form-contact');
+    const confirmation = document.getElementById('message-confirmation');
+    const erreur = document.getElementById('message-erreur');
+    
+    if (formContact) {
+      formContact.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const nom = document.getElementById('nom').value;
+        const contact = document.getElementById('email').value;
+        const sujet = document.getElementById('sujet').value;
+        const message = document.getElementById('message').value;
+        
+        confirmation.style.display = 'none';
+        erreur.style.display = 'none';
+        
+        try {
+          await db.collection('suggestions').add({
+            nom: nom,
+            contact: contact,
+            sujet: sujet,
+            message: message,
+            date: new Date().toLocaleDateString('fr-FR'),
+            statut: 'en-attente',
+            horodatage: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          
+          confirmation.style.display = 'block';
+          formContact.reset();
+          
+          setTimeout(() => {
+            confirmation.style.display = 'none';
+          }, 8000);
+        } catch (err) {
+          erreur.style.display = 'block';
+          console.error("Erreur:", err);
+        }
+      });
+    }
+    
+    chargerSuggestionsPubliques();
+  });
+
+  async function chargerSuggestionsPubliques() {
+    const liste = document.getElementById('liste-suggestions');
+    if (!liste) return;
+    
+    try {
+      const snapshot = await db.collection('suggestions')
+        .where('statut', '==', 'approuve')
+        .orderBy('horodatage', 'desc')
+        .limit(10)
+        .get();
+      
+      if (snapshot.empty) {
+        liste.innerHTML = '<p style="color:#718096; font-style:italic;">Aucune suggestion publiée pour le moment. Soyez le premier à partager la vôtre !</p>';
+        return;
+      }
+      
+      liste.innerHTML = '';
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        liste.innerHTML += `
+          <div style="padding:0.8rem; background:#F4F6F8; border-radius:4px; margin-bottom:0.8rem;">
+            <strong>${data.nom}</strong> <small style="color:#718096;">— ${data.date}</small>
+            <p style="margin-top:0.4rem; font-style:italic;">"${data.message}"</p>
+          </div>
+        `;
+      });
+    } catch (err) {
+      liste.innerHTML = '<p style="color:red;">Erreur de chargement. Vérifiez votre connexion.</p>';
+      console.error("Erreur chargement:", err);
+    }
+  }
+  </script>
+
 </body>
 </html>
