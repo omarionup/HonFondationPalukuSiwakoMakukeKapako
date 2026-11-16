@@ -11,6 +11,11 @@
     .btn-sheet { background:#0A3D62; color:white; border:none; padding:0.7rem 1.2rem; border-radius:4px; cursor:pointer; font-size:1rem; display:inline-block; text-decoration:none; margin-bottom:1.5rem; }
     .statut-en-attente { color:#F59E0B; font-weight:600; }
     .statut-approuve { color:#27AE60; font-weight:600; }
+    .btn-approuver { background:#27AE60; color:white; border:none; padding:0.4rem 0.8rem; border-radius:4px; cursor:pointer; margin-right:0.5rem; font-size:0.9rem; }
+    .btn-supprimer { background:#E74C3C; color:white; border:none; padding:0.4rem 0.8rem; border-radius:4px; cursor:pointer; font-size:0.9rem; }
+    .btn-approuver:hover { background:#219653; }
+    .btn-supprimer:hover { background:#c0392b; }
+    .actions-buttons { margin-top:0.7rem; }
   </style>
 </head>
 <body>
@@ -64,11 +69,9 @@
       <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
     </div>
 
-    <!-- ⚠️ REMPLACE CE LIEN PAR TON GOOGLE SHEET -->
     <a href="https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_TON_LIEN_GOOGLE_SHEET" target="_blank" class="btn-sheet">
       📊 Ouvrir mon tableau Google Sheets ↗️
     </a>
-    <p style="color:#718096; margin:-0.8rem 0 1.5rem 0; font-size:0.9rem;">Dans le tableau, remplacez "En attente" par "Approuvé" pour publier un message</p>
 
     <!-- Messages en attente -->
     <div class="carte-admin">
@@ -144,22 +147,33 @@ async function chargerTout() {
 async function chargerEnAttente() {
   const conteneur = document.getElementById('liste-en-attente');
   try {
-    const reponse = await fetch(LIEN_SHEETDB + '?search=Statut:En attente');
-    const messages = await reponse.json();
+    const reponse = await fetch(LIEN_SHEETDB);
+    const tousLesMessages = await reponse.json();
     
-    if (messages.length === 0) {
+    // Garde les messages dont le statut n'est PAS "Approuvé"
+    const messagesEnAttente = tousLesMessages.filter(msg => {
+      const statut = (msg.Statut || "").trim();
+      return statut !== "Approuvé";
+    });
+    
+    if (messagesEnAttente.length === 0) {
       conteneur.innerHTML = '<p style="color:#718096; font-style:italic;">Aucun message en attente. 🎉</p>';
       return;
     }
     
     conteneur.innerHTML = '';
-    messages.forEach(msg => {
+    messagesEnAttente.forEach((msg, index) => {
+      const ligneIndex = tousLesMessages.findIndex(m => m === msg) + 1; // +1 car l'en-tête est la ligne 1
       conteneur.innerHTML += `
-        <div class="message-en-attente">
+        <div class="message-en-attente" data-index="${ligneIndex}">
           <strong>${msg.Nom}</strong> — <small>${msg.Contact}</small>
           <span class="statut-en-attente" style="float:right;">⏳ En attente</span>
           <p style="margin:0.5rem 0;">${msg.Message}</p>
           <small style="color:#718096;">📅 ${msg.Date}</small>
+          <div class="actions-buttons">
+            <button class="btn-approuver" onclick="approuverMessage(${ligneIndex})">✅ Approuver</button>
+            <button class="btn-supprimer" onclick="supprimerMessage(${ligneIndex})">🗑️ Supprimer</button>
+          </div>
         </div>
       `;
     });
@@ -172,16 +186,21 @@ async function chargerEnAttente() {
 async function chargerApprouves() {
   const conteneur = document.getElementById('liste-approuves');
   try {
-    const reponse = await fetch(LIEN_SHEETDB + '?search=Statut:Approuvé');
-    const messages = await reponse.json();
+    const reponse = await fetch(LIEN_SHEETDB);
+    const tousLesMessages = await reponse.json();
     
-    if (messages.length === 0) {
+    const messagesApprouves = tousLesMessages.filter(msg => {
+      const statut = (msg.Statut || "").trim();
+      return statut === "Approuvé";
+    });
+    
+    if (messagesApprouves.length === 0) {
       conteneur.innerHTML = '<p style="color:#718096; font-style:italic;">Aucun message publié pour le moment.</p>';
       return;
     }
     
     conteneur.innerHTML = '';
-    messages.forEach(msg => {
+    messagesApprouves.forEach(msg => {
       conteneur.innerHTML += `
         <div style="padding:0.8rem; background:#F0FDF4; border-radius:4px; margin-bottom:0.5rem; border-left:3px solid #27AE60;">
           <strong>${msg.Nom}</strong> <small style="color:#718096;">— ${msg.Date}</small>
@@ -193,6 +212,53 @@ async function chargerApprouves() {
   } catch (erreur) {
     conteneur.innerHTML = '<p style="color:red;">Erreur de chargement</p>';
     console.error(erreur);
+  }
+}
+
+// ✅ Fonction : Approuver un message
+async function approuverMessage(ligneNumero) {
+  if (!confirm("Êtes-vous sûr de vouloir approuver ce message ?")) return;
+  
+  try {
+    // Mise à jour dans SheetDB : remplace le Statut par "Approuvé"
+    const reponse = await fetch(`${LIEN_SHEETDB}/${ligneNumero}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        Statut: "Approuvé"
+      })
+    });
+    
+    if (reponse.ok) {
+      alert("✅ Message approuvé ! Il est maintenant visible sur le site.");
+      chargerTout(); // Recharge les listes
+    } else {
+      alert("❌ Erreur lors de l'approbation");
+    }
+  } catch (erreur) {
+    alert("❌ Erreur : " + erreur.message);
+  }
+}
+
+// 🗑️ Fonction : Supprimer un message
+async function supprimerMessage(ligneNumero) {
+  if (!confirm("⚠️ Êtes-vous sûr de vouloir SUPPRIMER ce message ? Cette action est irréversible !")) return;
+  
+  try {
+    const reponse = await fetch(`${LIEN_SHEETDB}/${ligneNumero}`, {
+      method: 'DELETE'
+    });
+    
+    if (reponse.ok) {
+      alert("🗑️ Message supprimé définitivement.");
+      chargerTout(); // Recharge les listes
+    } else {
+      alert("❌ Erreur lors de la suppression");
+    }
+  } catch (erreur) {
+    alert("❌ Erreur : " + erreur.message);
   }
 }
 </script>
