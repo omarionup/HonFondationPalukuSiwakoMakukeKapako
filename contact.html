@@ -132,10 +132,26 @@
   </div>
 </footer>
 
-<!-- ✅ DANS CET ORDRE EXACT -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.min.js"></script>
-<script src="firebase-config.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.min.js"></script>
+
+<script>
+// ===== CONFIGURATION FIREBASE =====
+const firebaseConfig = {
+  apiKey: "AIzaSyBYXvIVNgII2OSb9nky-pSADQTYI6tEv8g",
+  authDomain: "fondation-paluku.firebaseapp.com",
+  projectId: "fondation-paluku",
+  storageBucket: "fondation-paluku.appspot.com",
+  messagingSenderId: "132602039423",
+  appId: "1:132602039423:web:7547231de610c2430a4"
+};
+
+// Initialiser Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+console.log("✅ Firebase connecté !");
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -156,8 +172,6 @@ document.addEventListener('DOMContentLoaded', function() {
       erreur.style.display = 'none';
       
       try {
-        if (!window.db) throw new Error("Firebase pas initialisé");
-        
         await db.collection('suggestions').add({
           nom: nom,
           contact: contact,
@@ -177,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
       } catch (err) {
         erreur.style.display = 'block';
         console.error("Erreur:", err);
+        alert("Détail de l'erreur : " + err.message);
       }
     });
   }
@@ -187,11 +202,6 @@ document.addEventListener('DOMContentLoaded', function() {
 async function chargerSuggestionsPubliques() {
   const liste = document.getElementById('liste-suggestions');
   if (!liste) return;
-  
-  if (!window.db) {
-    liste.innerHTML = '<p style="color:red;">Erreur de chargement — Firebase non connecté</p>';
-    return;
-  }
   
   try {
     const snapshot = await db.collection('suggestions')
@@ -216,7 +226,7 @@ async function chargerSuggestionsPubliques() {
       `;
     });
   } catch (err) {
-    liste.innerHTML = '<p style="color:red;">Erreur de chargement. Vérifiez votre connexion.</p>';
+    liste.innerHTML = '<p style="color:red;">Erreur de chargement : ' + err.message + '</p>';
     console.error("Erreur chargement:", err);
   }
 }
