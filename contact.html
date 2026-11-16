@@ -135,31 +135,36 @@ document.getElementById('champ-date').value = new Date().toLocaleDateString('fr-
 // ✅ Afficher message de remerciement après retour de SheetDB
 if (window.location.search.includes('success')) {
   document.getElementById('message-reussi').style.display = 'block';
-  // Effacer le message après 8 secondes
   setTimeout(() => {
     document.getElementById('message-reussi').style.display = 'none';
-    // Nettoyer l'URL pour cacher ?success
     history.replaceState({}, document.title, window.location.pathname);
   }, 8000);
 }
 
-// Charger et afficher les messages APPROUVÉS
+// Charger et afficher LES MESSAGES APPROUVÉS SEULEMENT
 const LIEN_SHEETDB = "https://sheetdb.io/api/v1/r8w4zccs5agk4";
 
 async function chargerMessagesApprouves() {
   const conteneur = document.getElementById('liste-citoyens');
   
   try {
-    const reponse = await fetch(LIEN_SHEETDB + '?search=Statut:Approuvé');
-    const messages = await reponse.json();
+    // Récupère TOUS les messages
+    const reponse = await fetch(LIEN_SHEETDB);
+    const tousLesMessages = await reponse.json();
     
-    if (messages.length === 0) {
+    // ✅ FILTRE : GARDE SEULEMENT CEUX QUI SONT "Approuvé"
+    const messagesFiltres = tousLesMessages.filter(msg => {
+      const statutNettoye = (msg.Statut || "").trim();
+      return statutNettoye === "Approuvé";
+    });
+    
+    if (messagesFiltres.length === 0) {
       conteneur.innerHTML = '<p style="color:#718096; font-style:italic;">Aucun message approuvé pour le moment. Soyez le premier à partager la vôtre !</p>';
       return;
     }
     
     conteneur.innerHTML = '';
-    messages.forEach(msg => {
+    messagesFiltres.forEach(msg => {
       conteneur.innerHTML += `
         <div style="padding:1rem; background:#F9FAFB; border-radius:6px; margin-bottom:0.8rem; border-left:3px solid #27AE60;">
           <strong>${msg.Nom}</strong> <small style="color:#718096;">— ${msg.Date}</small>
