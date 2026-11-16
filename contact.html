@@ -51,27 +51,28 @@
     <div class="carte">
       <h3>📩 Envoyer un message ou une suggestion</h3>
       
-      <form id="form-contact" action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST">
-        <label for="nom">Votre nom complet *</label>
-        <input type="text" id="nom" name="Nom" required placeholder="Ex: Jean Mulenda">
+      <!-- ✅ Message de confirmation qui s'affiche après envoi -->
+      <div id="message-reussi" style="display:none; color:green; padding:1rem; background:#E8F8F0; border-radius:4px; margin-bottom:1rem;">
+        ✅ Merci ! Votre message a été envoyé avec succès. Il sera lu et publié si approuvé.
+      </div>
+      
+      <!-- ✅ Formulaire SIMPLE — fonctionne sans erreur CORS -->
+      <form action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST">
+        <label for="Nom">Votre nom complet *</label>
+        <input type="text" id="Nom" name="Nom" required placeholder="Ex: Jean Mulenda">
         
-        <label for="contact">Email ou téléphone *</label>
-        <input type="text" id="contact" name="Contact" required placeholder="votre@email.com ou +243 XX XX XX XX">
+        <label for="Contact">Email ou téléphone *</label>
+        <input type="text" id="Contact" name="Contact" required placeholder="votre@email.com ou +243 XX XX XX XX">
         
-        <label for="message">Votre message *</label>
-        <textarea id="message" name="Message" rows="6" required placeholder="Écrivez votre message ici..."></textarea>
+        <label for="Message">Votre message *</label>
+        <textarea id="Message" name="Message" rows="6" required placeholder="Écrivez votre message ici..."></textarea>
         
+        <!-- Champs cachés automatiques -->
         <input type="hidden" name="Date" id="champ-date">
         <input type="hidden" name="Statut" value="En attente">
+        <input type="hidden" name="redirect" value="https://omarionup.github.io/HonFondationPalukuSiwakoMakukéKapako/contact.html">
         
         <button type="submit">Envoyer le message</button>
-        
-        <div id="msg-succes" style="display:none; color:green; margin-top:1rem; padding:0.8rem; background:#E8F8F0; border-radius:4px;">
-          ✅ Merci ! Votre message a été envoyé avec succès. Il sera lu et publié si approuvé.
-        </div>
-        <div id="msg-erreur" style="display:none; color:red; margin-top:1rem; padding:0.8rem; background:#FEE; border-radius:4px;">
-          ❌ Erreur lors de l'envoi. Veuillez réessayer plus tard.
-        </div>
       </form>
     </div>
     
@@ -115,7 +116,7 @@
       <h4>Informations</h4>
       <a href="vie-politique.html">Vie Politique</a>
       <a href="faire-un-don.html">Faire un Don</a>
-      <a href="admin-sheet.html">Administration</a>
+      <a href="admin.html">Administration</a>
     </div>
     <div class="footer-col">
       <h4>Contact</h4>
@@ -131,33 +132,16 @@
 // Date du jour automatique
 document.getElementById('champ-date').value = new Date().toLocaleDateString('fr-FR');
 
-// Envoyer le formulaire
-const form = document.getElementById('form-contact');
-form.addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const url = form.action;
-  const formData = new FormData(form);
-  
-  try {
-    const reponse = await fetch(url, {
-      method: 'POST',
-      body: formData
-    });
-    
-    if (reponse.ok) {
-      document.getElementById('msg-succes').style.display = 'block';
-      document.getElementById('msg-erreur').style.display = 'none';
-      form.reset();
-      document.getElementById('champ-date').value = new Date().toLocaleDateString('fr-FR');
-    } else {
-      throw new Error("Erreur serveur");
-    }
-  } catch(err) {
-    document.getElementById('msg-erreur').style.display = 'block';
-    console.error(err);
-  }
-});
+// ✅ Afficher message de remerciement après retour de SheetDB
+if (window.location.search.includes('success')) {
+  document.getElementById('message-reussi').style.display = 'block';
+  // Effacer le message après 8 secondes
+  setTimeout(() => {
+    document.getElementById('message-reussi').style.display = 'none';
+    // Nettoyer l'URL pour cacher ?success
+    history.replaceState({}, document.title, window.location.pathname);
+  }, 8000);
+}
 
 // Charger et afficher les messages APPROUVÉS
 const LIEN_SHEETDB = "https://sheetdb.io/api/v1/r8w4zccs5agk4";
@@ -184,7 +168,7 @@ async function chargerMessagesApprouves() {
       `;
     });
   } catch (erreur) {
-    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement. Rafraîchissez la page.</p>';
+    conteneur.innerHTML = '<p style="color:red;">Impossible de charger les messages</p>';
     console.error(erreur);
   }
 }
