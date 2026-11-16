@@ -146,6 +146,9 @@
               <label>Montant (USD)</label>
               <input type="number" id="don-montant" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
             </div>
+          </div>
+          <div style="display:grid; grid-template-columns:
+1fr 1fr; gap:1rem; margin-top:1rem;">
             <div>
               <label>Mode de paiement</label>
               <select id="don-mode" required style="width:100%; padding:0.5rem; border:1px solid #ddd; border-radius:4px;">
@@ -218,178 +221,179 @@
   </div>
 </footer>
 
-<!-- ✅ DANS CET ORDRE EXACT -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.min.js"></script>
-<script src="firebase-config.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.min.js"></script>
 
 <script>
-    const MOT_DE_PASSE_ADMIN = 'admin2026';
+// ===== CONFIGURATION FIREBASE =====
+const firebaseConfig = {
+  apiKey: "AIzaSyBYXvIVNgII2OSb9nky-pSADQTYI6tEv8g",
+  authDomain: "fondation-paluku.firebaseapp.com",
+  projectId: "fondation-paluku",
+  storageBucket: "fondation-paluku.appspot.com",
+  messagingSenderId: "132602039423",
+  appId: "1:132602039423:web:7547231de610c2430a4"
+};
 
-    function verifierMotDePasse(e) {
-      e.preventDefault();
-      const saisi = document.getElementById('mdp-admin').value;
-      if (saisi === MOT_DE_PASSE_ADMIN) {
-        document.getElementById('section-login').style.display = 'none';
-        document.getElementById('section-admin').style.display = 'block';
-        document.getElementById('erreur-mdp').style.display = 'none';
-        chargerSuggestions();
-        chargerDons();
-      } else {
-        document.getElementById('erreur-mdp').style.display = 'block';
-      }
+// Initialiser Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+console.log("✅ Firebase connecté !");
+</script>
+
+<script>
+const MOT_DE_PASSE_ADMIN = 'admin2026';
+
+function verifierMotDePasse(e) {
+  e.preventDefault();
+  const saisi = document.getElementById('mdp-admin').value;
+  if (saisi === MOT_DE_PASSE_ADMIN) {
+    document.getElementById('section-login').style.display = 'none';
+    document.getElementById('section-admin').style.display = 'block';
+    document.getElementById('erreur-mdp').style.display = 'none';
+    chargerSuggestions();
+    chargerDons();
+  } else {
+    document.getElementById('erreur-mdp').style.display = 'block';
+  }
+}
+
+function deconnexion() {
+  document.getElementById('section-login').style.display = 'block';
+  document.getElementById('section-admin').style.display = 'none';
+  document.getElementById('mdp-admin').value = '';
+}
+
+function afficherOnglet(nom) {
+  document.querySelectorAll('[id^="onglet-"]').forEach(el => el.style.display = 'none');
+  document.querySelectorAll('.onglet').forEach(el => el.classList.remove('actif'));
+  document.getElementById('onglet-' + nom).style.display = 'block';
+  document.getElementById('btn-' + nom).classList.add('actif');
+  
+  if (nom === 'dons') chargerDons();
+  if (nom === 'suggestions') chargerSuggestions();
+}
+
+async function chargerSuggestions() {
+  const tbody = document.getElementById('table-suggestions');
+  
+  try {
+    const snapshot = await db.collection('suggestions')
+      .where('statut', '==', 'en-attente')
+      .orderBy('horodatage', 'desc')
+      .get();
+    
+    if (snapshot.empty) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucune suggestion en attente</td></tr>';
+      return;
     }
-
-    function deconnexion() {
-      document.getElementById('section-login').style.display = 'block';
-      document.getElementById('section-admin').style.display = 'none';
-      document.getElementById('mdp-admin').value = '';
-    }
-
-    function afficherOnglet(nom) {
-      document.querySelectorAll('[id^="onglet-"]').forEach(el => el.style.display = 'none');
-      document.querySelectorAll('.onglet').forEach(el => el.classList.remove('actif'));
-      document.getElementById('onglet-' + nom).style.display = 'block';
-      document.getElementById('btn-' + nom).classList.add('actif');
-      
-      if (nom === 'dons') chargerDons();
-      if (nom === 'suggestions') chargerSuggestions();
-    }
-
-    async function chargerSuggestions() {
-      const tbody = document.getElementById('table-suggestions');
-      
-      if (!window.db) {
-        tbody.innerHTML = '<tr><td colspan="5" style="color:red; text-align:center;">❌ Erreur: Firebase non connecté — vérifiez firebase-config.js</td></tr>';
-        return;
-      }
-      
-      try {
-        const snapshot = await db.collection('suggestions')
-          .where('statut', '==', 'en-attente')
-          .orderBy('horodatage', 'desc')
-          .get();
-        
-        if (snapshot.empty) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucune suggestion en attente</td></tr>';
-          return;
-        }
-        
-        tbody.innerHTML = '';
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const id = doc.id;
-          tbody.innerHTML += `
-            <tr>
-              <td><strong>${data.nom}</strong></td>
-              <td>${data.contact}</td>
-              <td style="max-width:200px;">${data.message.substring(0, 45)}...</td>
-              <td>${data.date}</td>
-              <td style="text-align:center;">
-                <button class="bouton-voir" onclick="approuverMessage('${id}')">✅ Approuver</button>
-                <button class="bouton-suppr" onclick="supprimerMessage('${id}')">❌ Supprimer</button>
-              </td>
-            </tr>
-          `;
-        });
-      } catch (erreur) {
-        tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Erreur : ${erreur.message}</td></tr>`;
-        console.error("Erreur chargement suggestions:", erreur);
-      }
-    }
-
-    async function approuverMessage(id) {
-      if (confirm('✅ Publier ce message sur le site ?')) {
-        await db.collection('suggestions').doc(id).update({
-          statut: 'approuve'
-        });
-        chargerSuggestions();
-      }
-    }
-
-    async function supprimerMessage(id) {
-      if (confirm('❌ Supprimer définitivement ce message ?')) {
-        await db.collection('suggestions').doc(id).delete();
-        chargerSuggestions();
-      }
-    }
-
-    document.addEventListener('submit', function(e) {
-      if (e.target.id === 'form-don') {
-        e.preventDefault();
-        enregistrerDon();
-      }
+    
+    tbody.innerHTML = '';
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const id = doc.id;
+      tbody.innerHTML += `
+        <tr>
+          <td><strong>${data.nom}</strong></td>
+          <td>${data.contact}</td>
+          <td style="max-width:200px;">${data.message.substring(0, 45)}...</td>
+          <td>${data.date}</td>
+          <td style="text-align:center;">
+            <button class="bouton-voir" onclick="approuverMessage('${id}')">✅ Approuver</button>
+            <button class="bouton-suppr" onclick="supprimerMessage('${id}')">❌ Supprimer</button>
+          </td>
+        </tr>
+      `;
     });
+  } catch (erreur) {
+    tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Erreur : ${erreur.message}</td></tr>`;
+    console.error("Erreur chargement suggestions:", erreur);
+  }
+}
 
-    async function enregistrerDon() {
-      if (!window.db) {
-        alert("Erreur: Firebase non connecté");
-        return;
-      }
-      
-      const nom = document.getElementById('don-nom').value;
-      const montant = parseFloat(document.getElementById('don-montant').value);
-      const mode = document.getElementById('don-mode').value;
-      const date = document.getElementById('don-date').value;
+async function approuverMessage(id) {
+  if (confirm('✅ Publier ce message sur le site ?')) {
+    await db.collection('suggestions').doc(id).update({
+      statut: 'approuve'
+    });
+    chargerSuggestions();
+  }
+}
 
-      try {
-        await db.collection('dons').add({
-          nom: nom,
-          montant: montant,
-          mode: mode,
-          date: date,
-          horodatage: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        
-        document.getElementById('form-don').reset();
-        chargerDons();
-      } catch (erreur) {
-        alert("Erreur lors de l'enregistrement : " + erreur.message);
-      }
+async function supprimerMessage(id) {
+  if (confirm('❌ Supprimer définitivement ce message ?')) {
+    await db.collection('suggestions').doc(id).delete();
+    chargerSuggestions();
+  }
+}
+
+document.addEventListener('submit', function(e) {
+  if (e.target.id === 'form-don') {
+    e.preventDefault();
+    enregistrerDon();
+  }
+});
+
+async function enregistrerDon() {
+  const nom = document.getElementById('don-nom').value;
+  const montant = parseFloat(document.getElementById('don-montant').value);
+  const mode = document.getElementById('don-mode').value;
+  const date = document.getElementById('don-date').value;
+
+  try {
+    await db.collection('dons').add({
+      nom: nom,
+      montant: montant,
+      mode: mode,
+      date: date,
+      horodatage: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    document.getElementById('form-don').reset();
+    chargerDons();
+    alert("✅ Don enregistré avec succès !");
+  } catch (erreur) {
+    alert("Erreur lors de l'enregistrement : " + erreur.message);
+  }
+}
+
+async function chargerDons() {
+  const tbody = document.getElementById('table-dons');
+  const totalEl = document.getElementById('total-dons');
+  
+  try {
+    const snapshot = await db.collection('dons')
+      .orderBy('horodatage', 'desc')
+      .get();
+    
+    if (snapshot.empty) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucun don enregistré pour le moment</td></tr>';
+      totalEl.textContent = '0 USD';
+      return;
     }
-
-    async function chargerDons() {
-      const tbody = document.getElementById('table-dons');
-      const totalEl = document.getElementById('total-dons');
-      
-      if (!window.db) {
-        tbody.innerHTML = '<tr><td colspan="5" style="color:red; text-align:center;">❌ Erreur: Firebase non connecté</td></tr>';
-        totalEl.textContent = 'Erreur';
-        return;
-      }
-      
-      try {
-        const snapshot = await db.collection('dons')
-          .orderBy('horodatage', 'desc')
-          .get();
-        
-        if (snapshot.empty) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucun don enregistré pour le moment</td></tr>';
-          totalEl.textContent = '0 USD';
-          return;
-        }
-        
-        let total = 0;
-        tbody.innerHTML = '';
-        snapshot.forEach(doc => {
-          const d = doc.data();
-          total += d.montant;
-          tbody.innerHTML += `
-            <tr>
-              <td>${d.date}</td>
-              <td>${d.nom}</td>
-              <td>${d.montant} USD</td>
-              <td>${d.mode}</td>
-              <td style="text-align:center;">✅ Reçu</td>
-            </tr>
-          `;
-        });
-        totalEl.textContent = total + ' USD';
-      } catch (erreur) {
-        tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Erreur : ${erreur.message}</td></tr>`;
-        console.error("Erreur chargement dons:", erreur);
-      }
-    }
+    
+    let total = 0;
+    tbody.innerHTML = '';
+    snapshot.forEach(doc => {
+      const d = doc.data();
+      total += d.montant;
+      tbody.innerHTML += `
+        <tr>
+          <td>${d.date}</td>
+          <td>${d.nom}</td>
+          <td>${d.montant} USD</td>
+          <td>${d.mode}</td>
+          <td style="text-align:center;">✅ Reçu</td>
+        </tr>
+      `;
+    });
+    totalEl.textContent = total + ' USD';
+  } catch (erreur) {
+    tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Erreur : ${erreur.message}</td></tr>`;
+    console.error("Erreur chargement dons:", erreur);
+  }
+}
 </script>
 
 </body>
