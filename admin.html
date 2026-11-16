@@ -127,4 +127,236 @@
 
         <table class="tableau-admin" style="width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden;">
           <thead>
-            <tr style="background:#
+            <tr style="background:#<thead>
+            <tr style="background:#F4F6F8;">
+              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Date</th>
+              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Donateur</th>
+              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Montant</th>
+              <th style="padding:0.8rem; text-align:left; border-bottom:2px solid #E2E8F0;">Mode</th>
+              <th style="padding:0.8rem; text-align:center; border-bottom:2px solid #E2E8F0;">Reçu</th>
+            </tr>
+          </thead>
+          <tbody id="table-dons">
+            <tr>
+              <td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Chargement...</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div style="margin-top:2rem; padding:1.5rem; background:#E8F8F0; border-radius:6px;">
+          <h4>📊 Total collecté</h4>
+          <p style="font-size:1.8rem; font-weight:700; color:#27AE60; margin-top:0.5rem;" id="total-dons">0 USD</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .onglet {
+      background: transparent;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      color: #718096;
+    }
+    .onglet.actif {
+      border-bottom-color: #0A3D62;
+      color: #0A3D62;
+      font-weight: 600;
+    }
+    .onglet:hover {
+      color: #0A3D62;
+    }
+    .bouton-voir {
+      background: #27AE60;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 0.3rem;
+      font-size: 0.85rem;
+    }
+    .bouton-suppr {
+      background: #E74C3C;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    input, select {
+      box-sizing: border-box;
+    }
+  </style>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.min.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+    // 🔐 Mot de passe administrateur — à modifier !
+    const MOT_DE_PASSE_ADMIN = 'admin2026';
+
+    // Vérification du mot de passe
+    function verifierMotDePasse(e) {
+      e.preventDefault();
+      const saisi = document.getElementById('mdp-admin').value;
+      if (saisi === MOT_DE_PASSE_ADMIN) {
+        document.getElementById('section-login').style.display = 'none';
+        document.getElementById('section-admin').style.display = 'block';
+        document.getElementById('erreur-mdp').style.display = 'none';
+        chargerSuggestions();
+        chargerDons();
+      } else {
+        document.getElementById('erreur-mdp').style.display = 'block';
+      }
+    }
+
+    // Déconnexion
+    function deconnexion() {
+      document.getElementById('section-login').style.display = 'block';
+      document.getElementById('section-admin').style.display = 'none';
+      document.getElementById('mdp-admin').value = '';
+    }
+
+    // Changement d'onglet
+    function afficherOnglet(nom) {
+      document.querySelectorAll('[id^="onglet-"]').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.onglet').forEach(el => el.classList.remove('actif'));
+      document.getElementById('onglet-' + nom).style.display = 'block';
+      document.getElementById('btn-' + nom).classList.add('actif');
+      
+      if (nom === 'dons') chargerDons();
+      if (nom === 'suggestions') chargerSuggestions();
+    }
+
+    // === SUGGESTIONS ===
+    async function chargerSuggestions() {
+      const tbody = document.getElementById('table-suggestions');
+      
+      try {
+        const snapshot = await db.collection('suggestions')
+          .where('statut', '==', 'en-attente')
+          .orderBy('horodatage', 'desc')
+          .get();
+        
+        if (snapshot.empty) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucune suggestion en attente</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = '';
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const id = doc.id;
+          tbody.innerHTML += `
+            <tr>
+              <td><strong>${data.nom}</strong></td>
+              <td>${data.contact}</td>
+              <td style="max-width:200px;">${data.message.substring(0, 45)}...</td>
+              <td>${data.date}</td>
+              <td style="text-align:center;">
+                <button class="bouton-voir" onclick="approuverMessage('${id}')">✅ Approuver</button>
+                <button class="bouton-suppr" onclick="supprimerMessage('${id}')">❌ Supprimer</button>
+              </td>
+            </tr>
+          `;
+        });
+      } catch (erreur) {
+        tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Erreur : ${erreur.message}</td></tr>`;
+        console.error("Erreur chargement suggestions:", erreur);
+      }
+    }
+
+    async function approuverMessage(id) {
+      if (confirm('✅ Publier ce message sur le site ?')) {
+        await db.collection('suggestions').doc(id).update({
+          statut: 'approuve'
+        });
+        chargerSuggestions();
+      }
+    }
+
+    async function supprimerMessage(id) {
+      if (confirm('❌ Supprimer définitivement ce message ?')) {
+        await db.collection('suggestions').doc(id).delete();
+        chargerSuggestions();
+      }
+    }
+
+    // === DONS ===
+    document.addEventListener('submit', function(e) {
+      if (e.target.id === 'form-don') {
+        e.preventDefault();
+        enregistrerDon();
+      }
+    });
+
+    async function enregistrerDon() {
+      const nom = document.getElementById('don-nom').value;
+      const montant = parseFloat(document.getElementById('don-montant').value);
+      const mode = document.getElementById('don-mode').value;
+      const date = document.getElementById('don-date').value;
+
+      try {
+        await db.collection('dons').add({
+          nom: nom,
+          montant: montant,
+          mode: mode,
+          date: date,
+          horodatage: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        document.getElementById('form-don').reset();
+        chargerDons();
+      } catch (erreur) {
+        alert("Erreur lors de l'enregistrement : " + erreur.message);
+      }
+    }
+
+    async function chargerDons() {
+      const tbody = document.getElementById('table-dons');
+      const totalEl = document.getElementById('total-dons');
+      
+      try {
+        const snapshot = await db.collection('dons')
+          .orderBy('horodatage', 'desc')
+          .get();
+        
+        if (snapshot.empty) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:2rem; color:#718096;">Aucun don enregistré pour le moment</td></tr>';
+          totalEl.textContent = '0 USD';
+          return;
+        }
+        
+        let total = 0;
+        tbody.innerHTML = '';
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          total += d.montant;
+          tbody.innerHTML += `
+            <tr>
+              <td>${d.date}</td>
+              <td>${d.nom}</td>
+              <td>${d.montant} USD</td>
+              <td>${d.mode}</td>
+              <td style="text-align:center;">✅ Reçu</td>
+            </tr>
+          `;
+        });
+        totalEl.textContent = total + ' USD';
+      } catch (erreur) {
+        tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Erreur : ${erreur.message}</td></tr>`;
+        console.error("Erreur chargement dons:", erreur);
+      }
+    }
+  </script>
+
+</body>
+</html>
+
