@@ -8,12 +8,9 @@
   <style>
     .carte-admin { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin-bottom:1.5rem; }
     .message-en-attente { border-left:4px solid #F59E0B; padding:1rem; margin-bottom:1rem; background:#FFFBEB; border-radius:4px; }
-    .btn-approuver { background:#27AE60; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; margin-right:0.5rem; }
-    .btn-refuser { background:#E74C3C; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; }
     .btn-sheet { background:#0A3D62; color:white; border:none; padding:0.7rem 1.2rem; border-radius:4px; cursor:pointer; font-size:1rem; display:inline-block; text-decoration:none; margin-bottom:1.5rem; }
     .statut-en-attente { color:#F59E0B; font-weight:600; }
     .statut-approuve { color:#27AE60; font-weight:600; }
-    .statut-refuse { color:#E74C3C; font-weight:600; }
   </style>
 </head>
 <body>
@@ -67,11 +64,11 @@
       <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
     </div>
 
-    <!-- Lien direct vers Google Sheet -->
-    <a href="https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_LIEN_DE_TON_TABLEAU" target="_blank" class="btn-sheet">
+    <!-- ⚠️ IMPORTANT : Remplacez le lien ci-dessous par celui de votre Google Sheet -->
+    <a href="https://docs.google.com/spreadsheets/d/1yP7xWFNqKNXbpAoO9LuP07rlki4zCNM3vu_sR7dBKeA/edit?gid=0#gid=0" target="_blank" class="btn-sheet">
       📊 Ouvrir mon tableau Google Sheets ↗️
     </a>
-    <p style="color:#718096; margin:-0.8rem 0 1.5rem 0; font-size:0.9rem;">Cliquez pour modifier le statut d'un message : remplacez "En attente" par "Approuvé" pour publier</p>
+    <p style="color:#718096; margin:-0.8rem 0 1.5rem 0; font-size:0.9rem;">Dans le tableau, remplacez "En attente" par "Approuvé" pour publier un message</p>
 
     <!-- Messages en attente -->
     <div class="carte-admin">
@@ -156,21 +153,18 @@ async function chargerEnAttente() {
     }
     
     conteneur.innerHTML = '';
-    messages.forEach((msg, index) => {
+    messages.forEach(msg => {
       conteneur.innerHTML += `
         <div class="message-en-attente">
           <strong>${msg.Nom}</strong> — <small>${msg.Contact}</small>
           <span class="statut-en-attente" style="float:right;">⏳ En attente</span>
           <p style="margin:0.5rem 0;">${msg.Message}</p>
           <small style="color:#718096;">📅 ${msg.Date}</small>
-          <div style="margin-top:0.5rem;">
-            <span style="font-size:0.9rem; color:#0A3D62;">↗️ Ouvrez le tableau en haut pour changer le statut en "Approuvé"</span>
-          </div>
         </div>
       `;
     });
   } catch (erreur) {
-    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement</p>';
+    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement : vérifiez votre lien SheetDB</p>';
     console.error(erreur);
   }
 }
