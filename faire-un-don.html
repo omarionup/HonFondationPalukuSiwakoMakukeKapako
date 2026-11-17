@@ -6,149 +6,25 @@
   <title>Faire un Don — Fondation Paluku</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Barre des alertes */
-    .barre-alertes {
-      background: #0A3D62;
-      color: white;
-      padding: 0.5rem 0;
-      overflow: hidden;
-      position: relative;
-      z-index: 99;
-    }
-    .etiquette-alerte {
-      display: inline-flex;
-      align-items: center;
-      background: #E74C3C;
-      padding: 0.3rem 1rem;
-      font-weight: bold;
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      z-index: 1;
-    }
-    .point-clignotant {
-      width: 10px;
-      height: 10px;
-      background: #fff;
-      border-radius: 50%;
-      margin-right: 0.5rem;
-      animation: clignote 1s infinite;
-    }
-    @keyframes clignote {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
-    .contenu-actualites {
-      margin-left: 100px;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .ligne-actu {
-      display: inline-block;
-      padding-left: 100%;
-      animation: defile 30s linear infinite;
-    }
-    .item-actu {
-      display: inline-block;
-      padding: 0 2rem;
-    }
-    @keyframes defile {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-
-    .encart-total {
-      background: linear-gradient(135deg, #0A3D62, #105a8c);
-      color: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto 2rem;
-    }
-    .montant-total {
-      font-size: 2rem;
-      font-weight: bold;
-      margin: 0.5rem 0;
-    }
-
-    .carte-don {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      max-width: 700px;
-      margin: 0 auto;
-    }
-    .select-mode {
-      width: 100%;
-      padding: 0.8rem;
-      font-size: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      margin-bottom: 1.5rem;
-    }
-    .infos-paiement {
-      padding: 1.5rem;
-      background: #F9FAFB;
-      border-radius: 6px;
-      margin-top: 1rem;
-      display: none;
-    }
-    .infos-paiement.visible { display: block; }
-    .mode-titre {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #0A3D62;
-      margin-bottom: 1rem;
-    }
-    .ligne-info { margin: 0.5rem 0; }
-    .label-info { font-weight: 500; color: #333; }
-    .merci-message {
-      background: #E8F8F0;
-      border-left: 4px solid #27AE60;
-      padding: 1rem;
-      border-radius: 4px;
-      margin-top: 2rem;
-      text-align: center;
-      display: none;
-    }
-    .bloc-confirmation {
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px dashed #ddd;
-    }
-    .bloc-confirmation h4 { color: #0A3D62; margin-bottom: 1rem; }
+    .carte-don { background:#fff; padding:2rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); max-width:700px; margin:0 auto; }
+    .select-mode { width:100%; padding:0.8rem; font-size:1rem; border:1px solid #ddd; border-radius:4px; margin-bottom:1.5rem; }
+    .infos-paiement { padding:1.5rem; background:#F9FAFB; border-radius:6px; margin-top:1rem; display:none; }
+    .infos-paiement.visible { display:block; }
+    .mode-titre { font-size:1.1rem; font-weight:600; color:#0A3D62; margin-bottom:1rem; }
+    .ligne-info { margin:0.5rem 0; }
+    .label-info { font-weight:500; color:#333; }
+    .merci-message { background:#E8F8F0; border-left:4px solid #27AE60; padding:1rem; border-radius:4px; margin-top:2rem; text-align:center; display:none; }
+    .bloc-confirmation { margin-top:2rem; padding-top:1.5rem; border-top:1px dashed #ddd; }
+    .bloc-confirmation h4 { color:#0A3D62; margin-bottom:1rem; }
     input[type="text"], input[type="email"], textarea {
-      width: 100%;
-      padding: 0.7rem;
-      margin: 0.5rem 0 1rem 0;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-family: inherit;
+      width:100%; padding:0.7rem; margin:0.5rem 0 1rem 0; border:1px solid #ddd; border-radius:4px; font-family:inherit;
     }
-    label { font-weight: 500; color: #333; }
-    .btn-envoyer {
-      background: #27AE60;
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-      width: 100%;
-    }
-    .btn-envoyer:hover { background: #219653; }
-    .note-info {
-      font-size: 0.85rem;
-      color: #718096;
-      margin-top: -0.5rem;
-      margin-bottom: 1rem;
-      background: #F3F4F6;
-      padding: 0.7rem;
-      border-radius: 4px;
-    }
+    label { font-weight:500; color:#333; }
+    .btn-envoyer { background:#27AE60; color:white; border:none; padding:0.8rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; width:100%; }
+    .btn-envoyer:hover { background:#219653; }
+    .note-info { font-size:0.85rem; color:#718096; margin-top:-0.5rem; margin-bottom:1rem; background:#F3F4F6; padding:0.7rem; border-radius:4px; }
+    .encart-total { background:linear-gradient(135deg, #0A3D62, #105a8c); color:white; padding:1.5rem; border-radius:8px; text-align:center; margin-bottom:2rem; }
+    .montant-total { font-size:2rem; font-weight:bold; margin:0.5rem 0; }
   </style>
 </head>
 <body>
@@ -160,9 +36,7 @@
     ALERTES
   </div>
   <div class="contenu-actualites">
-    <div class="ligne-actu">
-      <span class="item-actu">💝 Votre soutien fait la différence — merci pour votre générosité !</span>
-    </div>
+    <span class="item-actu">💝 Votre soutien fait la différence — merci pour votre générosité !</span>
   </div>
 </div>
 
@@ -196,10 +70,10 @@
     et développer des projets durables pour notre communauté.
   </p>
 
-  <!-- === ENCART TOTAL DES DONS === -->
+  <!-- === ENCART TOTAL DES DONS REÇUS === -->
   <div class="encart-total">
     <p>💰 Total des dons collectés à ce jour</p>
-    <div class="montant-total" id="affichage-total">Chargement...</div>
+    <div class="montant-total" id="affichage-total">— FC</div>
     <small>Merci à tous nos généreux donateurs ❤️</small>
   </div>
 
@@ -214,6 +88,7 @@
       <option value="especes">💵 En espèces au bureau</option>
     </select>
 
+    <!-- === INFOS AIRTEL MONEY === -->
     <div id="infos-airtel" class="infos-paiement">
       <div class="mode-titre">📱 Paiement par Airtel Money</div>
       <p>Utilisez ces numéros pour envoyer votre don :</p>
@@ -231,6 +106,7 @@
       </p>
     </div>
 
+    <!-- === INFOS VERSEMENT BANCAIRE === -->
     <div id="infos-versement" class="infos-paiement">
       <div class="mode-titre">🏦 Versement Bancaire</div>
       <p>Vous pouvez effectuer un virement ou un versement sur notre compte bancaire :</p>
@@ -251,6 +127,7 @@
       </p>
     </div>
 
+    <!-- === INFOS EN ESPÈCES === -->
     <div id="infos-especes" class="infos-paiement">
       <div class="mode-titre">💵 En espèces au bureau</div>
       <p>Vous pouvez également déposer votre don directement dans nos bureaux :</p>
@@ -268,6 +145,7 @@
       </p>
     </div>
 
+    <!-- === FORMULAIRE DE CONFIRMATION DE DON === -->
     <div class="bloc-confirmation">
       <h4>📩 Confirmez votre don</h4>
       <p style="font-size:0.9rem; color:#718096; margin-bottom:1rem;">Remplissez ce formulaire pour nous informer de votre don.</p>
@@ -293,8 +171,9 @@
         <input type="text" id="Reference" name="Reference" placeholder="Code reçu par SMS (facultatif)">
         
         <label for="Message">Message d'accompagnement (facultatif)</label>
-        <textarea id="Message" name="Message" rows="3" placeholder="Écrivez un mot de soutien..."></textarea>
+        <textarea id="Message" name="Message" rows="3" placeholder="Écrivez un mot de soutien ou une remarque..."></textarea>
         
+        <!-- Champs cachés automatiques -->
         <input type="hidden" name="Date" id="date-don">
         <input type="hidden" name="Type" value="Don">
         <input type="hidden" name="Statut" value="En attente">
@@ -303,9 +182,10 @@
         <button type="submit" class="btn-envoyer">📤 Envoyer la confirmation</button>
       </form>
       
+      <!-- Message de remerciement -->
       <div id="message-merci" class="merci-message">
         <strong>🙏 Merci pour votre générosité !</strong><br>
-        Nous avons bien reçu votre confirmation de don.
+        Nous avons bien reçu votre confirmation de don. Merci pour votre soutien à la Fondation Paluku.
       </div>
     </div>
   </div>
@@ -341,6 +221,7 @@
 </footer>
 
 <script>
+// Date automatique
 document.getElementById('date-don').value = new Date().toLocaleDateString('fr-FR');
 
 function afficherInfosPaiement() {
@@ -357,16 +238,16 @@ function afficherInfosPaiement() {
   }
 }
 
+// Afficher message de remerciement si retour du formulaire
 if (window.location.search.includes('success=1')) {
   document.getElementById('message-merci').style.display = 'block';
   document.getElementById('form-don').reset();
   document.getElementById('mode-paiement').value = '';
   afficherInfosPaiement();
-  chargerTotalDons();
+  chargerTotalDons(); // Recharger le total après envoi
 }
 
-chargerTotalDons();
-
+// Calculer et afficher le total des dons APPROUVÉS
 async function chargerTotalDons() {
   try {
     const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4');
@@ -374,19 +255,24 @@ async function chargerTotalDons() {
     
     let total = 0;
     toutesLignes.forEach(ligne => {
+      // Prendre seulement les dons APPROUVÉS
       if (ligne.Type === 'Don' && ligne.Statut === 'Approuvé' && ligne.Montant) {
+        // Extraire seulement les chiffres du montant
         const chiffres = ligne.Montant.replace(/[^0-9.,]/g, '').replace(',', '.');
         const montant = parseFloat(chiffres);
         if (!isNaN(montant)) total += montant;
       }
     });
     
+    // Afficher avec la devise
     document.getElementById('affichage-total').textContent = total.toLocaleString('fr-FR') + ' FC';
   } catch (erreur) {
-    console.error('Erreur chargement total :', erreur);
-    document.getElementById('affichage-total').textContent = 'Erreur de chargement';
+    console.error(erreur);
+    document.getElementById('affichage-total').textContent = '— FC';
   }
 }
+
+chargerTotalDons();
 </script>
 
 </body>
