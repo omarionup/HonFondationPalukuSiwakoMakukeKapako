@@ -23,8 +23,17 @@
     .btn-envoyer { background:#27AE60; color:white; border:none; padding:0.8rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; width:100%; }
     .btn-envoyer:hover { background:#219653; }
     .note-info { font-size:0.85rem; color:#718096; margin-top:-0.5rem; margin-bottom:1rem; background:#F3F4F6; padding:0.7rem; border-radius:4px; }
+    
     .encart-total { background:linear-gradient(135deg, #0A3D62, #105a8c); color:white; padding:1.5rem; border-radius:8px; text-align:center; margin-bottom:2rem; }
     .montant-total { font-size:2rem; font-weight:bold; margin:0.5rem 0; }
+    
+    .liste-donateurs { max-width:700px; margin:3rem auto; }
+    .liste-donateurs h3 { text-align:center; color:#0A3D62; margin-bottom:1.5rem; }
+    .donateur { background:#fff; padding:1.2rem; border-radius:6px; margin-bottom:1rem; border-left:3px solid #F59E0B; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+    .don-nom { font-weight:600; color:#0A3D62; margin-bottom:0.3rem; }
+    .don-montant { color:#27AE60; font-weight:bold; font-size:1.1rem; margin-bottom:0.3rem; }
+    .don-date { font-size:0.85rem; color:#718096; margin-bottom:0.5rem; }
+    .don-message { color:#4B5563; font-style:italic; }
   </style>
 </head>
 <body>
@@ -75,6 +84,14 @@
     <p>💰 Total des dons collectés à ce jour</p>
     <div class="montant-total" id="affichage-total">— FC</div>
     <small>Merci à tous nos généreux donateurs ❤️</small>
+  </div>
+
+  <!-- === LISTE DES DONATEURS APPROUVÉS === -->
+  <div class="liste-donateurs">
+    <h3>🙏 Nos généreux donateurs</h3>
+    <div id="liste-dons">
+      <p style="text-align:center; color:#718096;">Chargement des dons...</p>
+    </div>
   </div>
 
   <div class="carte-don">
@@ -244,10 +261,11 @@ if (window.location.search.includes('success=1')) {
   document.getElementById('form-don').reset();
   document.getElementById('mode-paiement').value = '';
   afficherInfosPaiement();
-  chargerTotalDons(); // Recharger le total après envoi
+  chargerTotalDons();
+  chargerListeDons();
 }
 
-// Calculer et afficher le total des dons APPROUVÉS
+// Charger le total et la liste des dons approuvés
 async function chargerTotalDons() {
   try {
     const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4');
@@ -255,16 +273,13 @@ async function chargerTotalDons() {
     
     let total = 0;
     toutesLignes.forEach(ligne => {
-      // Prendre seulement les dons APPROUVÉS
       if (ligne.Type === 'Don' && ligne.Statut === 'Approuvé' && ligne.Montant) {
-        // Extraire seulement les chiffres du montant
         const chiffres = ligne.Montant.replace(/[^0-9.,]/g, '').replace(',', '.');
         const montant = parseFloat(chiffres);
         if (!isNaN(montant)) total += montant;
       }
     });
     
-    // Afficher avec la devise
     document.getElementById('affichage-total').textContent = total.toLocaleString('fr-FR') + ' FC';
   } catch (erreur) {
     console.error(erreur);
@@ -272,7 +287,42 @@ async function chargerTotalDons() {
   }
 }
 
+async function chargerListeDons() {
+  try {
+    const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4?sort_by=Date&sort_order=desc');
+    const toutesLignes = await reponse.json();
+    
+    const donsApprouves = toutesLignes.filter(ligne => 
+      ligne.Type === 'Don' && ligne.Statut === 'Approuvé'
+    );
+    
+    const conteneur = document.getElementById('liste-dons');
+    
+    if (donsApprouves.length === 0) {
+      conteneur.innerHTML = '<p style="text-align:center; color:#718096;">Soyez le premier donateur ! Votre nom apparaîtra ici après approbation ❤️</p>';
+      return;
+    }
+    
+    conteneur.innerHTML = '';
+    donsApprouves.forEach(ligne => {
+      conteneur.innerHTML += `
+        <div class="donateur">
+          <div class="don-nom">${ligne.Nom || 'Anonyme'}</div>
+          <div class="don-montant">${ligne.Montant || ''}</div>
+          <div class="don-date">${ligne.Date || ''}</div>
+          ${ligne.Message ? `<div class="don-message">"${ligne.Message}"</div>` : ''}
+        </div>
+      `;
+    });
+  } catch (erreur) {
+    console.error(erreur);
+    document.getElementById('liste-dons').innerHTML = 
+      '<p style="text-align:center; color:red;">Impossible de charger la liste des dons.</p>';
+  }
+}
+
 chargerTotalDons();
+chargerListeDons();
 </script>
 
 </body>
