@@ -6,64 +6,183 @@
   <title>Faire un Don — Fondation Paluku</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .carte-don { background:#fff; padding:2rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); max-width:700px; margin:0 auto; }
-    .select-mode { width:100%; padding:0.8rem; font-size:1rem; border:1px solid #ddd; border-radius:4px; margin-bottom:1.5rem; }
-    .infos-paiement { padding:1.5rem; background:#F9FAFB; border-radius:6px; margin-top:1rem; display:none; }
-    .infos-paiement.visible { display:block; }
-    .mode-titre { font-size:1.1rem; font-weight:600; color:#0A3D62; margin-bottom:1rem; }
-    .ligne-info { margin:0.5rem 0; }
-    .label-info { font-weight:500; color:#333; }
-    .merci-message { background:#E8F8F0; border-left:4px solid #27AE60; padding:1rem; border-radius:4px; margin-top:2rem; text-align:center; display:none; }
-    .bloc-confirmation { margin-top:2rem; padding-top:1.5rem; border-top:1px dashed #ddd; }
-    .bloc-confirmation h4 { color:#0A3D62; margin-bottom:1rem; }
-    input[type="text"], input[type="email"], textarea {
-      width:100%; padding:0.7rem; margin:0.5rem 0 1rem 0; border:1px solid #ddd; border-radius:4px; font-family:inherit;
-    }
-    label { font-weight:500; color:#333; }
-    .btn-envoyer { background:#27AE60; color:white; border:none; padding:0.8rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; width:100%; }
-    .btn-envoyer:hover { background:#219653; }
-    .note-info { font-size:0.85rem; color:#718096; margin-top:-0.5rem; margin-bottom:1rem; background:#F3F4F6; padding:0.7rem; border-radius:4px; }
-    
-    .encart-total { background:linear-gradient(135deg, #0A3D62, #105a8c); color:white; padding:1.5rem; border-radius:8px; text-align:center; margin-bottom:1.5rem; }
-    .montant-total { font-size:2rem; font-weight:bold; margin:0.5rem 0; }
-    
-    /* Barre défilante sous le total */
-    .conteneur-defilant {
-      background: #FFFBEB;
-      border-radius: 6px;
-      padding: 0.8rem 0;
-      margin-bottom: 2rem;
+    /* Barre des alertes */
+    .barre-alertes {
+      background: #0A3D62;
+      color: white;
+      padding: 0.5rem 0;
       overflow: hidden;
-      border-left: 4px solid #F59E0B;
+      position: relative;
+      z-index: 99;
     }
-    .defilant-ligne {
-      display: flex;
+    .etiquette-alerte {
+      display: inline-flex;
+      align-items: center;
+      background: #E74C3C;
+      padding: 0.3rem 1rem;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 1;
+    }
+    .point-clignotant {
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      animation: clignote 1s infinite;
+    }
+    @keyframes clignote {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    .contenu-actualites {
+      margin-left: 100px;
+      overflow: hidden;
       white-space: nowrap;
-      animation: defilement 25s linear infinite;
     }
-    .defilant-ligne:hover {
+    .ligne-actu {
+      display: inline-block;
+      padding-left: 100%;
+      animation: defile 30s linear infinite;
+    }
+    .item-actu {
+      display: inline-block;
+      padding: 0 2rem;
+    }
+    @keyframes defile {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .encart-total {
+      background: linear-gradient(135deg, #0A3D62, #105a8c);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 1rem;
+    }
+    .montant-total {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+
+    /* ✅ Barre défilante des dons — sous le total */
+    .barre-dons-defilante {
+      background: #FFF8E1;
+      border: 1px solid #F59E0B;
+      border-radius: 6px;
+      padding: 0.6rem 0;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .contenu-dons-defilant {
+      display: inline-block;
+      padding-left: 100%;
+      animation: defile-dons 35s linear infinite;
+    }
+    .contenu-dons-defilant:hover {
       animation-play-state: paused;
     }
-    .item-don {
+    .item-don-defilant {
+      display: inline-block;
       padding: 0 2.5rem;
       color: #92400E;
     }
-    .item-don .nom { font-weight: 600; }
-    .item-don .montant { font-weight: bold; color: #B45309; }
-    .item-don .msg { font-style: italic; font-size: 0.95rem; }
-    
-    @keyframes defilement {
+    .item-don-defilant .nom { font-weight: 600; }
+    .item-don-defilant .montant { font-weight: bold; color: #B45309; }
+    .item-don-defilant .message { font-style: italic; font-size: 0.95rem; }
+    @keyframes defile-dons {
       0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      100% { transform: translateX(-100%); }
     }
-    
-    .liste-donateurs { max-width:700px; margin:3rem auto; }
-    .liste-donateurs h3 { text-align:center; color:#0A3D62; margin-bottom:1.5rem; }
-    .donateur { background:#fff; padding:1.2rem; border-radius:6px; margin-bottom:1rem; border-left:3px solid #F59E0B; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
-    .don-nom { font-weight:600; color:#0A3D62; margin-bottom:0.3rem; }
-    .don-montant { color:#27AE60; font-weight:bold; font-size:1.1rem; margin-bottom:0.3rem; }
-    .don-date { font-size:0.85rem; color:#718096; margin-bottom:0.5rem; }
-    .don-message { color:#4B5563; font-style:italic; }
+
+    .carte-don {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .select-mode {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+    .infos-paiement {
+      padding: 1.5rem;
+      background: #F9FAFB;
+      border-radius: 6px;
+      margin-top: 1rem;
+      display: none;
+    }
+    .infos-paiement.visible { display: block; }
+    .mode-titre {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #0A3D62;
+      margin-bottom: 1rem;
+    }
+    .ligne-info { margin: 0.5rem 0; }
+    .label-info { font-weight: 500; color: #333; }
+    .merci-message {
+      background: #E8F8F0;
+      border-left: 4px solid #27AE60;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-top: 2rem;
+      text-align: center;
+      display: none;
+    }
+    .bloc-confirmation {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed #ddd;
+    }
+    .bloc-confirmation h4 { color: #0A3D62; margin-bottom: 1rem; }
+    input[type="text"], input[type="email"], textarea {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.5rem 0 1rem 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+    label { font-weight: 500; color: #333; }
+    .btn-envoyer {
+      background: #27AE60;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+    }
+    .btn-envoyer:hover { background: #219653; }
+    .note-info {
+      font-size: 0.85rem;
+      color: #718096;
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+      background: #F3F4F6;
+      padding: 0.7rem;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -75,7 +194,9 @@
     ALERTES
   </div>
   <div class="contenu-actualites">
-    <span class="item-actu">💝 Votre soutien fait la différence — merci pour votre générosité !</span>
+    <div class="ligne-actu">
+      <span class="item-actu">💝 Votre soutien fait la différence — merci pour votre générosité !</span>
+    </div>
   </div>
 </div>
 
@@ -109,25 +230,17 @@
     et développer des projets durables pour notre communauté.
   </p>
 
-  <!-- === ENCART TOTAL DES DONS REÇUS === -->
+  <!-- === ENCART TOTAL DES DONS === -->
   <div class="encart-total">
     <p>💰 Total des dons collectés à ce jour</p>
     <div class="montant-total" id="affichage-total">— FC</div>
     <small>Merci à tous nos généreux donateurs ❤️</small>
   </div>
 
-  <!-- ✅ BARRE DÉFILANTE SOUS LE TOTAL -->
-  <div class="conteneur-defilant" id="section-defilante" style="display:none;">
-    <div class="defilant-ligne" id="contenu-defilant">
-      <!-- Les dons s'affichent ici en défilement -->
-    </div>
-  </div>
-
-  <!-- === LISTE DES DONATEURS APPROUVÉS === -->
-  <div class="liste-donateurs">
-    <h3>🙏 Nos généreux donateurs</h3>
-    <div id="liste-dons">
-      <p style="text-align:center; color:#718096;">Chargement des dons...</p>
+  <!-- ✅ BARRE DÉFILANTE DES DONATEURS SOUS LE TOTAL -->
+  <div class="barre-dons-defilante" id="barre-dons" style="display:none;">
+    <div class="contenu-dons-defilant" id="contenu-dons-defilant">
+      <!-- Les dons s'affichent ici et défilent -->
     </div>
   </div>
 
@@ -292,7 +405,7 @@ function afficherInfosPaiement() {
   }
 }
 
-// Afficher message de remerciement si retour du formulaire
+// Message de succès
 if (window.location.search.includes('success=1')) {
   document.getElementById('message-merci').style.display = 'block';
   document.getElementById('form-don').reset();
@@ -301,18 +414,16 @@ if (window.location.search.includes('success=1')) {
   chargerTout();
 }
 
-// Charger tout au démarrage
 chargerTout();
 
 async function chargerTout() {
   await Promise.all([
     chargerTotalDons(),
-    chargerListeDons(),
     chargerBarreDefilante()
   ]);
 }
 
-// Charger le total des dons
+// Calculer et afficher le total
 async function chargerTotalDons() {
   try {
     const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4');
@@ -327,15 +438,15 @@ async function chargerTotalDons() {
       }
     });
     
-    document.getElementById('affichage-total').textContent = total.toLocaleString('fr-FR') + ' FC';
+    document.getElementById('affichage     document.getElementById('affichage-total').textContent = total.toLocaleString('fr-FR') + ' FC';
   } catch (erreur) {
     console.error(erreur);
     document.getElementById('affichage-total').textContent = '— FC';
   }
 }
 
-// Charger la liste complète des dons
-async function chargerListeDons() {
+// Charger la barre défilante des dons
+async function chargerBarreDefilante() {
   try {
     const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4?sort_by=Date&sort_order=desc');
     const toutesLignes = await reponse.json();
@@ -344,64 +455,29 @@ async function chargerListeDons() {
       ligne.Type === 'Don' && ligne.Statut === 'Approuvé'
     );
     
-    const conteneur = document.getElementById('liste-dons');
+    const barreDons = document.getElementById('barre-dons');
+    const contenuDefilant = document.getElementById('contenu-dons-defilant');
     
     if (donsApprouves.length === 0) {
-      conteneur.innerHTML = '<p style="text-align:center; color:#718096;">Soyez le premier donateur ! Votre nom apparaîtra ici après approbation ❤️</p>';
+      barreDons.style.display = 'none';
       return;
     }
     
-    conteneur.innerHTML = '';
-    donsApprouves.forEach(ligne => {
-      conteneur.innerHTML += `
-        <div class="donateur">
-          <div class="don-nom">${ligne.Nom || 'Anonyme'}</div>
-          <div class="
-    conteneur.innerHTML += `
-        <div class="donateur">
-          <div class="don-nom">${ligne.Nom || 'Anonyme'}</div>
-          <div class="don-montant">${ligne.Montant || ''}</div>
-          <div class="don-date">${ligne.Date || ''}</div>
-          ${ligne.Message ? `<div class="don-message">"${ligne.Message}"</div>` : ''}
-        </div>
-      `;
-    });
-  } catch (erreur) {
-    console.error(erreur);
-    document.getElementById('liste-dons').innerHTML = 
-      '<p style="text-align:center; color:red;">Impossible de charger la liste des dons.</p>';
-  }
-}
-
-// Charger la barre défilante sous le total
-async function chargerBarreDefilante() {
-  try {
-    const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4?sort_by=Date&sort_order=desc&limit=10');
-    const toutesLignes = await reponse.json();
-    
-    const donsApprouves = toutesLignes.filter(ligne => 
-      ligne.Type === 'Don' && ligne.Statut === 'Approuvé'
-    );
-    
-    const sectionDefilante = document.getElementById('section-defilante');
-    const contenuDefilant = document.getElementById('contenu-defilant');
-    
-    if (donsApprouves.length === 0) {
-      sectionDefilante.style.display = 'none';
-      return;
-    }
-    
-    sectionDefilante.style.display = 'block';
+    barreDons.style.display = 'block';
     let html = '';
     
-    // Dupliquer pour un défilement continu parfait
+    // Dupliquer pour un défilement continu sans coupure
     for (let i = 0; i < 2; i++) {
       donsApprouves.forEach(ligne => {
+        const nom = ligne.Nom || 'Un donateur anonyme';
+        const montant = ligne.Montant || '';
+        const message = ligne.Message ? ` — "${ligne.Message}"` : '';
+        
         html += `
-          <span class="item-don">
-            <span class="nom">${ligne.Nom || 'Un donateur anonyme'}</span> a donné 
-            <span class="montant">${ligne.Montant || ''}</span>
-            ${ligne.Message ? ` — <span class="msg">"${ligne.Message}"</span>` : ''} ❤️
+          <span class="item-don-defilant">
+            ❤️ <span class="nom">${nom}</span> a donné 
+            <span class="montant">${montant}</span>
+            ${message} &nbsp;&nbsp;|&nbsp;&nbsp;
           </span>
         `;
       });
@@ -416,3 +492,4 @@ async function chargerBarreDefilante() {
 
 </body>
 </html>
+
