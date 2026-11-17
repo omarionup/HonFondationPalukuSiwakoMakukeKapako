@@ -8,14 +8,13 @@
   <style>
     .carte-admin { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin-bottom:1.5rem; }
     .message-en-attente { border-left:4px solid #F59E0B; padding:1rem; margin-bottom:1rem; background:#FFFBEB; border-radius:4px; }
-    .btn-sheet { background:#0A3D62; color:white; border:none; padding:0.7rem 1.2rem; border-radius:4px; cursor:pointer; font-size:1rem; display:inline-block; text-decoration:none; margin-bottom:1.5rem; }
+    .message-approuve { border-left:4px solid #27AE60; padding:1rem; margin-bottom:1rem; background:#F0FDF4; border-radius:4px; }
+    .btn-gerer { background:#0A3D62; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; font-size:0.9rem; margin-top:0.5rem; }
+    .btn-gerer:hover { background:#082c47; }
     .statut-en-attente { color:#F59E0B; font-weight:600; }
     .statut-approuve { color:#27AE60; font-weight:600; }
-    .btn-approuver { background:#27AE60; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; margin-right:0.5rem; font-size:0.95rem; }
-    .btn-supprimer { background:#E74C3C; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; font-size:0.95rem; }
-    .btn-approuver:hover { background:#219653; }
-    .btn-supprimer:hover { background:#c0392b; }
-    .actions-buttons { margin-top:0.8rem; }
+    .lien-sheet { background:#27AE60; color:white; padding:0.7rem 1.2rem; border-radius:4px; text-decoration:none; display:inline-block; margin-bottom:1.5rem; }
+    .lien-sheet:hover { background:#219653; }
   </style>
 </head>
 <body>
@@ -69,9 +68,11 @@
       <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
     </div>
 
-    <a href="https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_TON_LIEN_GOOGLE_SHEET" target="_blank" class="btn-sheet">
+    <!-- 👇 REMPLACE CE LIEN PAR TON LIEN GOOGLE SHEETS -->
+    <a href="https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_TON_LIEN_GOOGLE_SHEET" target="_blank" class="lien-sheet">
       📊 Ouvrir mon tableau Google Sheets ↗️
     </a>
+    <p style="color:#718096; margin:-0.5rem 0 1.5rem 0; font-size:0.9rem;">Dans le tableau : change "En attente" par "Approuvé" pour publier</p>
 
     <!-- Messages en attente -->
     <div class="carte-admin">
@@ -117,6 +118,8 @@
 <script>
 const MOT_DE_PASSE_ADMIN = 'admin2026';
 const LIEN_SHEETDB = "https://sheetdb.io/api/v1/r8w4zccs5agk4";
+// 👇 REMPLACE PAR TON LIEN GOOGLE SHEETS
+const LIEN_GOOGLE_SHEET = "https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_TON_LIEN_GOOGLE_SHEET/edit";
 
 function verifierMotDePasse(e) {
   e.preventDefault();
@@ -150,7 +153,7 @@ async function chargerEnAttente() {
     const reponse = await fetch(LIEN_SHEETDB);
     const tousLesMessages = await reponse.json();
     
-    // Filtrer : afficher ceux qui ne sont PAS "Approuvé"
+    // Affiche ceux qui ne sont PAS "Approuvé"
     const messagesEnAttente = tousLesMessages.filter(msg => {
       const statut = (msg.Statut || "").trim();
       return statut !== "Approuvé";
@@ -163,24 +166,20 @@ async function chargerEnAttente() {
     
     conteneur.innerHTML = '';
     messagesEnAttente.forEach((msg, index) => {
-      // Calcul du numéro de ligne dans SheetDB
-      const ligneSheetDB = index + 2; // +2 car SheetDB compte l'en-tête comme ligne 1
-      
+      const ligneNum = index + 2;
       conteneur.innerHTML += `
         <div class="message-en-attente">
           <strong>${msg.Nom}</strong> — <small>${msg.Contact}</small>
           <span class="statut-en-attente" style="float:right;">⏳ En attente</span>
           <p style="margin:0.5rem 0;">${msg.Message}</p>
           <small style="color:#718096;">📅 ${msg.Date}</small>
-          <div class="actions-buttons">
-            <button class="btn-approuver" onclick="approuverMessage(${ligneSheetDB})">✅ Approuver</button>
-            <button class="btn-supprimer" onclick="supprimerMessage(${ligneSheetDB})">🗑️ Supprimer</button>
-          </div>
+          <br>
+          <a href="${LIEN_GOOGLE_SHEET}?range=E${ligneNum}" target="_blank" class="btn-gerer">📋 Gérer dans le tableau</a>
         </div>
       `;
     });
   } catch (erreur) {
-    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement — vérifiez votre lien SheetDB</p>';
+    conteneur.innerHTML = '<p style="color:red;">❌ Erreur de chargement — vérifiez votre connexion internet</p>';
     console.error(erreur);
   }
 }
@@ -204,7 +203,7 @@ async function chargerApprouves() {
     conteneur.innerHTML = '';
     messagesApprouves.forEach(msg => {
       conteneur.innerHTML += `
-        <div style="padding:0.8rem; background:#F0FDF4; border-radius:4px; margin-bottom:0.5rem; border-left:3px solid #27AE60;">
+        <div class="message-approuve">
           <strong>${msg.Nom}</strong> <small style="color:#718096;">— ${msg.Date}</small>
           <span class="statut-approuve" style="float:right;">✅ Publié</span>
           <p style="margin:0.3rem 0; font-style:italic;">"${msg.Message}"</p>
@@ -212,48 +211,8 @@ async function chargerApprouves() {
       `;
     });
   } catch (erreur) {
-    conteneur.innerHTML = '<p style="color:red;">Erreur de chargement</p>';
+    conteneur.innerHTML = '<p style="color:red;">❌ Erreur de chargement</p>';
     console.error(erreur);
-  }
-}
-
-// ✅ Approuver un message
-async function approuverMessage(ligneNumero) {
-  if (!confirm("Êtes-vous sûr de vouloir approuver ce message ?")) return;
-  
-  try {
-    const reponse = await fetch(`${LIEN_SHEETDB}/${ligneNumero}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ Statut: "Approuvé" })
-    });
-    
-    if (reponse.ok) {
-      alert("✅ Message approuvé !");
-      chargerTout();
-    } else {
-      alert("❌ Erreur : vérifiez que SheetDB est en mode Écriture");
-    }
-  } catch (erreur) {
-    alert("❌ Erreur : " + erreur.message);
-  }
-}
-
-// 🗑️ Supprimer un message
-async function supprimerMessage(ligneNumero) {
-  if (!confirm("⚠️ Supprimer définitivement ce message ?")) return;
-  
-  try {
-    const reponse = await fetch(`${LIEN_SHEETDB}/${ligneNumero}`, { method: 'DELETE' });
-    
-    if (reponse.ok) {
-      alert("🗑️ Message supprimé !");
-      chargerTout();
-    } else {
-      alert("❌ Erreur lors de la suppression");
-    }
-  } catch (erreur) {
-    alert("❌ Erreur : " + erreur.message);
   }
 }
 </script>
