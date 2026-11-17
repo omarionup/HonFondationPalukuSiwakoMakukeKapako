@@ -5,151 +5,239 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Faire un Don — Fondation Paluku</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .carte-don { background:#fff; padding:2rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); max-width:700px; margin:0 auto; }
+    .select-mode { width:100%; padding:0.8rem; font-size:1rem; border:1px solid #ddd; border-radius:4px; margin-bottom:1.5rem; }
+    .infos-paiement { padding:1.5rem; background:#F9FAFB; border-radius:6px; margin-top:1rem; display:none; }
+    .infos-paiement.visible { display:block; }
+    .mode-titre { font-size:1.1rem; font-weight:600; color:#0A3D62; margin-bottom:1rem; }
+    .ligne-info { margin:0.5rem 0; }
+    .label-info { font-weight:500; color:#333; }
+    .merci-message { background:#E8F8F0; border-left:4px solid #27AE60; padding:1rem; border-radius:4px; margin-top:2rem; text-align:center; display:none; }
+    .bloc-confirmation { margin-top:2rem; padding-top:1.5rem; border-top:1px dashed #ddd; }
+    .bloc-confirmation h4 { color:#0A3D62; margin-bottom:1rem; }
+    input[type="text"], input[type="email"], input[type="file"], textarea {
+      width:100%; padding:0.7rem; margin:0.5rem 0 1rem 0; border:1px solid #ddd; border-radius:4px; font-family:inherit;
+    }
+    label { font-weight:500; color:#333; }
+    .btn-envoyer { background:#27AE60; color:white; border:none; padding:0.8rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; width:100%; }
+    .btn-envoyer:hover { background:#219653; }
+    .note-fichier { font-size:0.85rem; color:#718096; margin-top:-0.5rem; margin-bottom:1rem; }
+  </style>
 </head>
 <body>
 
-  <header>
-    <div class="header-contenu">
-      <div class="logo-conteneur">
-        <img src="logo.png" alt="Logo Fondation Paluku" class="logo">
-        <div class="header-titre">
-          <h1>Fondation Paluku</h1>
-          <p>Siwako Makuké Kapako</p>
-        </div>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="projets.html">Nos Projets</a></li>
-          <li><a href="realisations.html">Réalisations</a></li>
-          <li><a href="vie-politique.html">Vie Politique</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="faire-un-don.html" class="bouton-don actif">Faire un Don</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+<!-- ===== BARRE ALERTES ===== -->
 <div class="barre-alertes">
   <div class="etiquette-alerte">
     <span class="point-clignotant"></span>
     ALERTES
   </div>
   <div class="contenu-actualites">
-    <span class="item-actu">📢 Bienvenue sur le site officiel de la Fondation Paluku Siwako Makuké Kapako — Au service du peuple de Lubero !</span>
-    <span class="item-actu">📍 Prochaine mission : Rencontre communautaire à Lubero-centre — 15 novembre 2026</span>
-    <span class="item-actu">📚 Campagne de distribution de kits scolaires en cours — Merci à nos donateurs !</span>
-    <span class="item-actu">💬 Envoyez vos suggestions via notre page Contact — Votre voix compte !</span>
+    <span class="item-actu">💬 Votre soutien fait la différence — merci pour votre générosité !</span>
   </div>
 </div>
-  <main>
-    <h2 class="titre-section">Faire un Don</h2>
-    <p style="text-align:center; max-width:700px; margin:0 auto 3rem;">Votre soutien nous permet de poursuivre nos actions en faveur du développement de Lubero. Chaque don compte et est utilisé de manière transparente.</p>
 
-    <div class="grille-2">
-      <div class="carte">
-        <h3>💡 Comment soutenir la fondation ?</h3>
-        <p>Plusieurs options s'offrent à vous. Choisissez celle qui vous convient le mieux :</p>
-        
-        <form id="formulaire-don">
-          <label for="mode-paiement">Mode de paiement</label>
-          <select id="mode-paiement" onchange="afficherInfosPaiement()">
-            <option value="">— Sélectionnez un mode de paiement —</option>
-            <option value="airtel">Airtel Money</option>
-            <option value="mpesa">M-Pesa</option>
-            <option value="orange">Orange Money</option>
-            <option value="versement">Versement Bancaire</option>
-          </select>
-
-          <div id="infos-airtel" class="infos-paiement">
-            <h4>📱 Airtel Money</h4>
-            <p><strong>Numéro :</strong> +243 82 XX XX XX XX</p>
-            <p><strong>Nom du compte :</strong> Fondation Paluku Siwako Makuké Kapako</p>
-            <p>Indiquez votre nom dans le motif du paiement. Merci pour votre générosité !</p>
-          </div>
-
-          <div id="infos-mpesa" class="infos-paiement">
-            <h4>📱 M-Pesa</h4>
-            <p><strong>Numéro :</strong> +243 81 XX XX XX XX</p>
-            <p><strong>Nom du compte :</strong> Fondation Paluku</p>
-            <p>Nous vous confirmerons la réception de votre don dans les plus brefs délais.</p>
-          </div>
-
-          <div id="infos-orange" class="infos-paiement">
-            <h4>📱 Orange Money</h4>
-            <p><strong>Numéro :</strong> +243 90 XX XX XX XX</p>
-            <p><strong>Nom du compte :</strong> Fondation Paluku</p>
-            <p>Merci de préciser vos coordonnées pour l'envoi de votre reçu.</p>
-          </div>
-
-          <div id="infos-versement" class="infos-paiement">
-            <h4>🏦 Coordonnées Bancaires</h4>
-            <p><strong>Banque :</strong> Exemple — BCDC Lubero</p>
-            <p><strong>Intitulé du compte :</strong> Fondation Paluku Siwako Makuké Kapako</p>
-            <p><strong>Numéro de compte :</strong> 123 456 789 00</p>
-            <p><strong>SWIFT :</strong> BCDCCDKI</p>
-            <p><strong>Référence :</strong> Don — [Votre Nom]</p>
-          </div>
-        </form>
-      </div>
-
-      <div class="carte">
-        <h3>🙏 Pourquoi faire un don ?</h3>
-        <ul style="list-style:none; padding:0; line-height:2;">
-          <li>🎓 Soutenir l'éducation des enfants de Lubero</li>
-          <li>🏥 Améliorer l'accès aux soins de santé</li>
-          <li>💧 Construire et réhabiliter des points d'eau</li>
-          <li>🤝 Renforcer la solidarité communautaire</li>
-          <li>📊 Contribuer à un développement durable et local</li>
-        </ul>
-        <p style="margin-top:1.5rem; font-style:italic;">Tous nos comptes sont vérifiables et nos rapports financiers sont publiés régulièrement dans la section <a href="realisations.html" style="color:#0A3D62;">Réalisations</a>.</p>
+<header>
+  <div class="header-contenu">
+    <div class="logo-conteneur">
+      <img src="logo.png" alt="Logo Fondation Paluku" class="logo">
+      <div class="header-titre">
+        <h1>Fondation Paluku</h1>
+        <p>Siwako Makuké Kapako</p>
       </div>
     </div>
-  </main>
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="projets.html">Nos Projets</a></li>
+        <li><a href="realisations.html">Réalisations</a></li>
+        <li><a href="vie-politique.html">Vie Politique</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="faire-un-don.html" class="actif bouton-don">Faire un Don</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 
-  <footer>
-    <div class="footer-contenu">
-      <div class="footer-col">
-        <h4>Fondation Paluku</h4>
-        <p>Siwako Makuké Kapako<br>Au service du peuple de Lubero</p>
-      </div>
-      <div class="footer-col">
-        <h4>Liens rapides</h4>
-        <a href="index.html">Accueil</a>
-        <a href="projets.html">Nos Projets</a>
-        <a href="realisations.html">Réalisations</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="footer-col">
-        <h4>Informations</h4>
-        <a href="vie-politique.html">Vie Politique</a>
-        <a href="faire-un-don.html">Faire un Don</a>
-        <a href="admin.html">Administration</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +247 XXX XXX XXX<br>✉️ contact@fondationpaluku.cd</p>
-      </div>
-    </div>
-    <div class="footer-bas">
-      © 2026 Fondation Paluku Siwako Makuké Kapako — Tous droits réservés
-    </div>
-  </footer>
+<main>
+  <h2 class="titre-section">💝 Faire un Don à la Fondation</h2>
+  <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">
+    Votre don contribue directement à améliorer les conditions de vie des populations du territoire de Lubero. 
+    Chaque contribution, petite ou grande, nous aide à construire des écoles, soutenir les familles dans le besoin, 
+    et développer des projets durables pour notre communauté.
+  </p>
 
-  <script>
-    function afficherInfosPaiement() {
-      // Masquer toutes les infos
-      document.querySelectorAll('.infos-paiement').forEach(el => {
-        el.classList.remove('visible');
-      });
+  <div class="carte-don">
+    <h3 style="text-align:center; color:#0A3D62; margin-bottom:1.5rem;">Choisissez votre mode de paiement</h3>
+    
+    <label for="mode-paiement">Mode de paiement :</label>
+    <select id="mode-paiement" class="select-mode" onchange="afficherInfosPaiement()">
+      <option value="">— Sélectionnez un mode de paiement —</option>
+      <option value="airtel">📱 Airtel Money</option>
+      <option value="versement">🏦 Versement Bancaire</option>
+      <option value="especes">💵 En espèces au bureau</option>
+    </select>
+
+    <!-- === INFOS AIRTEL MONEY === -->
+    <div id="infos-airtel" class="infos-paiement">
+      <div class="mode-titre">📱 Paiement par Airtel Money</div>
+      <p>Utilisez ces numéros pour envoyer votre don :</p>
+      <div class="ligne-info">
+        <span class="label-info">Bénéficiaire :</span> Fondation Paluku Siwako Makuké Kapako
+      </div>
+      <div class="ligne-info">
+        <span class="label-info">Numéro 1 :</span> +243 82 000 000 00
+      </div>
+      <div class="ligne-info">
+        <span class="label-info">Numéro 2 :</span> +243 97 000 000 00
+      </div>
+      <p style="margin-top:1rem; font-size:0.9rem; color:#718096;">
+        💡 Après votre envoi, remplissez le formulaire ci-dessous pour nous envoyer la preuve de paiement.
+      </p>
+    </div>
+
+    <!-- === INFOS VERSEMENT BANCAIRE === -->
+    <div id="infos-versement" class="infos-paiement">
+      <div class="mode-titre">🏦 Versement Bancaire</div>
+      <p>Vous pouvez effectuer un virement ou un versement sur notre compte bancaire :</p>
+      <div class="ligne-info">
+        <span class="label-info">Nom du compte :</span> Fondation Paluku Siwako Makuké Kapako
+      </div>
+      <div class="ligne-info">
+        <span class="label-info">Banque :</span> — À compléter —
+      </div>
+      <div class="ligne-info">
+        <span class="label-info">Numéro de compte :</span> — À compléter —
+      </div>
+      <div class="ligne-info">
+        <span class="label-info">Code SWIFT :</span> — À compléter —
+      </div>
+      <p style="margin-top:1rem; font-size:0.9rem; color:#718096;">
+        💡 Après votre versement, remplissez le formulaire ci-dessous et joignez le reçu.
+      </p>
+    </div>
+
+    <!-- === INFOS EN ESPÈCES === -->
+    <div id="infos-especes" class="infos-paiement">
+      <div class="mode-titre">💵 En espèces au bureau</div>
+      <p>Vous pouvez également déposer votre don directement dans nos bureaux :</p>
+      <div class="ligne-info">
+        <span class="label-info">Adresse :</span> Lubero-centre, Territoire de Lubero, Province du Nord-Kivu
+      </div>
+      <div class="ligne-info">
+        <span class="label-info">Heures de réception :</span> Lundi à Vendredi, 9h00 — 15h00
+      </div>
+      <div class="ligne-info">
+        <span class="label-info">Contact :</span> +243 82 000 000 00
+      </div>
+      <p style="margin-top:1rem; font-size:0.9rem; color:#718096;">
+        💡 Un reçu officiel vous sera remis directement au bureau.
+      </p>
+    </div>
+
+    <!-- === FORMULAIRE DE CONFIRMATION DE DON === -->
+    <div class="bloc-confirmation">
+      <h4>📩 Confirmez votre don</h4>
+      <p style="font-size:0.9rem; color:#718096; margin-bottom:1rem;">Remplissez ce formulaire pour nous informer de votre don et nous envoyer la preuve de paiement.</p>
       
-      // Afficher la sélection
-      const choix = document.getElementById('mode-paiement').value;
-      if (choix) {
-        const element = document.getElementById('infos-' + choix);
-        if (element) element.classList.add('visible');
-      }
-    }
-  </script>
+      <form id="form-don" action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST" enctype="multipart/form-data">
+        <label for="NomDonateur">Votre nom complet *</label>
+        <input type="text" id="NomDonateur" name="NomDonateur" required placeholder="Ex: Jean Mulenda">
+        
+        <label for="ContactDonateur">Email ou téléphone *</label>
+        <input type="text" id="ContactDonateur" name="ContactDonateur" required placeholder="votre@email.com ou +243 XX XX XX XX">
+        
+        <label for="Montant">Montant du don (FC ou $)</label>
+        <input type="text" id="Montant" name="Montant" placeholder="Ex: 50 000 FC">
+        
+        <label for="ModePaiement">Mode de paiement utilisé</label>
+        <input type="text" id="ModePaiement" name="ModePaiement" readonly placeholder="Sélectionnez un mode ci-dessus">
+        
+        <label for="Messagedon">Message d'accompagnement (facultatif)</label>
+        <textarea id="Messagedon" name="Messagedon" rows="3" placeholder="Écrivez un mot de soutien ou une remarque..."></textarea>
+        
+        <label for="Preuve">Joindre la preuve de paiement (photo ou reçu)</label>
+        <input type="file" id="Preuve" name="Preuve" accept="image/*,.pdf">
+        <div class="note-fichier">Formats acceptés : JPG, PNG, PDF — Taille max : 5 Mo</div>
+        
+        <!-- Champs cachés automatiques -->
+        <input type="hidden" name="Date" id="date-don">
+        <input type="hidden" name="Type" value="Don">
+        <input type="hidden" name="Statut" value="En attente">
+        <input type="hidden" name="redirect" value="https://omarionup.github.io/HonFondationPalukuSiwakoMakukéKapako/faire-un-don.html?success=1">
+        
+        <button type="submit" class="btn-envoyer">📤 Envoyer la confirmation</button>
+      </form>
+      
+      <!-- Message de remerciement -->
+      <div id="message-merci" class="merci-message">
+        <strong>🙏 Merci pour votre générosité !</strong><br>
+        Nous avons bien reçu votre confirmation de don. Merci pour votre soutien à la Fondation Paluku.
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-contenu">
+    <div class="footer-col">
+      <h4>Fondation Paluku</h4>
+      <p>Siwako Makuké Kapako<br>Au service du peuple de Lubero</p>
+    </div>
+    <div class="footer-col">
+      <h4>Liens rapides</h4>
+      <a href="index.html">Accueil</a>
+      <a href="projets.html">Nos Projets</a>
+      <a href="realisations.html">Réalisations</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Informations</h4>
+      <a href="vie-politique.html">Vie Politique</a>
+      <a href="faire-un-don.html">Faire un Don</a>
+      <a href="admin.html">Administration</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +243 82 000 000 00<br>✉️ contact@fondationpaluku.cd</p>
+    </div>
+  </div>
+  <div class="footer-bas">
+    © 2026 Fondation Paluku Siwako Makuké Kapako — Tous droits réservés
+  </div>
+</footer>
+
+<script>
+// Date automatique
+document.getElementById('date-don').value = new Date().toLocaleDateString('fr-FR');
+
+function afficherInfosPaiement() {
+  const choix = document.getElementById('mode-paiement').value;
+  const selectTexte = document.getElementById('mode-paiement').options[document.getElementById('mode-paiement').selectedIndex].text;
+  
+  // Cache toutes les sections
+  document.getElementById('infos-airtel').classList.remove('visible');
+  document.getElementById('infos-versement').classList.remove('visible');
+  document.getElementById('infos-especes').classList.remove('visible');
+  
+  // Remplit automatiquement le mode de paiement dans le formulaire
+  document.getElementById('ModePaiement').value = choix ? selectTexte : '';
+  
+  // Affiche seulement celle choisie
+  if (choix) {
+    document.getElementById('infos-' + choix).classList.add('visible');
+  }
+}
+
+// Afficher message de remerciement si retour du formulaire
+if (window.location.search.includes('success=1')) {
+  document.getElementById('message-merci').style.display = 'block';
+  document.getElementById('form-don').reset();
+  document.getElementById('mode-paiement').value = '';
+  afficherInfosPaiement();
+}
+</script>
 
 </body>
 </html>
