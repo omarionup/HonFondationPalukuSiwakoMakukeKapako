@@ -23,6 +23,8 @@
     .btn-envoyer { background:#27AE60; color:white; border:none; padding:0.8rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; width:100%; }
     .btn-envoyer:hover { background:#219653; }
     .note-info { font-size:0.85rem; color:#718096; margin-top:-0.5rem; margin-bottom:1rem; background:#F3F4F6; padding:0.7rem; border-radius:4px; }
+    .encart-total { background:linear-gradient(135deg, #0A3D62, #105a8c); color:white; padding:1.5rem; border-radius:8px; text-align:center; margin-bottom:2rem; }
+    .montant-total { font-size:2rem; font-weight:bold; margin:0.5rem 0; }
   </style>
 </head>
 <body>
@@ -34,7 +36,7 @@
     ALERTES
   </div>
   <div class="contenu-actualites">
-    <span class="item-actu">💬 Votre soutien fait la différence — merci pour votre générosité !</span>
+    <span class="item-actu">💝 Votre soutien fait la différence — merci pour votre générosité !</span>
   </div>
 </div>
 
@@ -53,7 +55,7 @@
         <li><a href="projets.html">Nos Projets</a></li>
         <li><a href="realisations.html">Réalisations</a></li>
         <li><a href="vie-politique.html">Vie Politique</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="contact.html">Suggestions</a></li>
         <li><a href="faire-un-don.html" class="actif bouton-don">Faire un Don</a></li>
       </ul>
     </nav>
@@ -67,6 +69,13 @@
     Chaque contribution, petite ou grande, nous aide à construire des écoles, soutenir les familles dans le besoin, 
     et développer des projets durables pour notre communauté.
   </p>
+
+  <!-- === ENCART TOTAL DES DONS REÇUS === -->
+  <div class="encart-total">
+    <p>💰 Total des dons collectés à ce jour</p>
+    <div class="montant-total" id="affichage-total">— FC</div>
+    <small>Merci à tous nos généreux donateurs ❤️</small>
+  </div>
 
   <div class="carte-don">
     <h3 style="text-align:center; color:#0A3D62; margin-bottom:1.5rem;">Choisissez votre mode de paiement</h3>
@@ -193,7 +202,7 @@
       <a href="index.html">Accueil</a>
       <a href="projets.html">Nos Projets</a>
       <a href="realisations.html">Réalisations</a>
-      <a href="contact.html">Contact</a>
+      <a href="contact.html">Suggestions</a>
     </div>
     <div class="footer-col">
       <h4>Informations</h4>
@@ -219,15 +228,11 @@ function afficherInfosPaiement() {
   const choix = document.getElementById('mode-paiement').value;
   const selectTexte = document.getElementById('mode-paiement').options[document.getElementById('mode-paiement').selectedIndex].text;
   
-  // Cache toutes les sections
   document.getElementById('infos-airtel').classList.remove('visible');
   document.getElementById('infos-versement').classList.remove('visible');
   document.getElementById('infos-especes').classList.remove('visible');
-  
-  // Remplit automatiquement le mode de paiement dans le formulaire
   document.getElementById('ModePaiement').value = choix ? selectTexte : '';
   
-  // Affiche seulement celle choisie
   if (choix) {
     document.getElementById('infos-' + choix).classList.add('visible');
   }
@@ -239,7 +244,35 @@ if (window.location.search.includes('success=1')) {
   document.getElementById('form-don').reset();
   document.getElementById('mode-paiement').value = '';
   afficherInfosPaiement();
+  chargerTotalDons(); // Recharger le total après envoi
 }
+
+// Calculer et afficher le total des dons APPROUVÉS
+async function chargerTotalDons() {
+  try {
+    const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4');
+    const toutesLignes = await reponse.json();
+    
+    let total = 0;
+    toutesLignes.forEach(ligne => {
+      // Prendre seulement les dons APPROUVÉS
+      if (ligne.Type === 'Don' && ligne.Statut === 'Approuvé' && ligne.Montant) {
+        // Extraire seulement les chiffres du montant
+        const chiffres = ligne.Montant.replace(/[^0-9.,]/g, '').replace(',', '.');
+        const montant = parseFloat(chiffres);
+        if (!isNaN(montant)) total += montant;
+      }
+    });
+    
+    // Afficher avec la devise
+    document.getElementById('affichage-total').textContent = total.toLocaleString('fr-FR') + ' FC';
+  } catch (erreur) {
+    console.error(erreur);
+    document.getElementById('affichage-total').textContent = '— FC';
+  }
+}
+
+chargerTotalDons();
 </script>
 
 </body>
