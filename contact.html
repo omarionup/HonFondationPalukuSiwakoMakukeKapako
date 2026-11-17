@@ -3,8 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact — Fondation Paluku</title>
+  <title>Nous Contacter — Fondation Paluku</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .conteneur-contact { max-width:800px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
+    @media(max-width:600px) { .conteneur-contact { grid-template-columns:1fr; } }
+    .carte-info { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+    .carte-form { background:#fff; padding:1.5rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+    label { font-weight:500; color:#333; display:block; margin-bottom:0.3rem; }
+    input, textarea { width:100%; padding:0.7rem; margin-bottom:1rem; border:1px solid #ddd; border-radius:4px; font-family:inherit; }
+    button { background:#0A3D62; color:white; border:none; padding:0.8rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; width:100%; }
+    button:hover { background:#082c47; }
+    .msg-success { background:#E8F8F0; border-left:4px solid #27AE60; padding:1rem; border-radius:4px; margin-top:1rem; display:none; }
+    
+    .suggestions-public { margin-top:3rem; max-width:800px; margin-left:auto; margin-right:auto; }
+    .suggestion { background:#fff; padding:1.2rem; border-radius:6px; margin-bottom:1rem; border-left:3px solid #27AE60; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
+    .auteur { font-weight:600; color:#0A3D62; margin-bottom:0.3rem; }
+    .date-sugg { font-size:0.85rem; color:#718096; margin-bottom:0.5rem; }
+    .message-sugg { color:#4B5563; }
+  </style>
 </head>
 <body>
 
@@ -15,9 +32,7 @@
     ALERTES
   </div>
   <div class="contenu-actualites">
-    <span class="item-actu">📢 Bienvenue sur le site officiel de la Fondation Paluku Siwako Makuké Kapako — Au service du peuple de Lubero !</span>
-    <span class="item-actu">📍 Prochaine mission : Rencontre communautaire à Lubero-centre — 15 novembre 2026</span>
-    <span class="item-actu">💬 Envoyez vos suggestions — votre voix compte !</span>
+    <span class="item-actu">💝 Vos suggestions et vos messages comptent pour nous — merci !</span>
   </div>
 </div>
 
@@ -36,7 +51,7 @@
         <li><a href="projets.html">Nos Projets</a></li>
         <li><a href="realisations.html">Réalisations</a></li>
         <li><a href="vie-politique.html">Vie Politique</a></li>
-        <li><a href="contact.html" class="actif">Contact</a></li>
+        <li><a href="contact.html" class="actif">Suggestions</a></li>
         <li><a href="faire-un-don.html" class="bouton-don">Faire un Don</a></li>
       </ul>
     </nav>
@@ -44,57 +59,54 @@
 </header>
 
 <main>
-  <h2 class="titre-section">Nous Contacter</h2>
-  <p style="text-align:center; max-width:700px; margin:0 auto 3rem;">Votre voix compte. Partagez vos suggestions, vos préoccupations ou vos questions — nous vous répondrons dans les meilleurs délais.</p>
+  <h2 class="titre-section">📬 Envoyez-nous un message ou une suggestion</h2>
 
-  <div class="grille-2">
-    <div class="carte">
-      <h3>📩 Envoyer un message ou une suggestion</h3>
+  <div class="conteneur-contact">
+    <!-- === INFOS DE CONTACT === -->
+    <div class="carte-info">
+      <h3>Nos coordonnées</h3>
+      <p><strong>📍 Adresse :</strong><br>Lubero-centre, Territoire de Lubero<br>Province du Nord-Kivu, RDC</p>
+      <p><strong>📞 Téléphone :</strong><br>+243 82 000 000 00<br>+243 97 000 000 00</p>
+      <p><strong>✉️ Email :</strong><br>contact@fondationpaluku.cd</p>
+      <p><strong>🕒 Heures de bureau :</strong><br>Lundi à Vendredi<br>09h00 — 15h00</p>
+    </div>
+
+    <!-- === FORMULAIRE DE SUGGESTION === -->
+    <div class="carte-form">
+      <h3>Écrivez-nous</h3>
       
-      <!-- Message de confirmation après envoi -->
-      <div id="message-reussi" style="display:none; color:green; padding:1rem; background:#E8F8F0; border-radius:4px; margin-bottom:1rem;">
-        ✅ Merci ! Votre message a été envoyé avec succès. Il sera lu et publié si approuvé.
-      </div>
-      
-      <!-- Formulaire d'envoi -->
-      <form action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST">
+      <form id="form-contact" action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST">
         <label for="Nom">Votre nom complet *</label>
         <input type="text" id="Nom" name="Nom" required placeholder="Ex: Jean Mulenda">
         
         <label for="Contact">Email ou téléphone *</label>
         <input type="text" id="Contact" name="Contact" required placeholder="votre@email.com ou +243 XX XX XX XX">
         
-        <label for="Message">Votre message *</label>
-        <textarea id="Message" name="Message" rows="6" required placeholder="Écrivez votre message ici..."></textarea>
+        <label for="Message">Votre message ou suggestion *</label>
+        <textarea id="Message" name="Message" rows="5" required placeholder="Écrivez votre message ici..."></textarea>
         
-        <!-- Champs automatiques -->
-        <input type="hidden" name="Date" id="champ-date">
-        <!-- ❌ Plus de valeur par défaut pour Statut — tu décides seul dans le tableau -->
-        <input type="hidden" name="redirect" value="https://omarionup.github.io/HonFondationPalukuSiwakoMakukéKapako/contact.html">
+        <!-- Champs cachés automatiques -->
+        <input type="hidden" name="Date" id="date-contact">
+        <input type="hidden" name="Type" value="Suggestion">
+        <input type="hidden" name="Statut" value="En attente">
+        <input type="hidden" name="redirect" value="https://omarionup.github.io/HonFondationPalukuSiwakoMakukéKapako/contact.html?success=1">
         
-        <button type="submit">Envoyer le message</button>
+        <button type="submit">📤 Envoyer mon message</button>
       </form>
-    </div>
-    
-    <div>
-      <div class="carte">
-        <h3>📍 Nos Coordonnées</h3>
-        <p><strong>Siège :</strong><br>Lubero-centre, Territoire de Lubero<br>Province du Nord-Kivu<br>République Démocratique du Congo</p>
-        
-        <p style="margin-top:1rem;"><strong>Heures de bureau :</strong><br>Lundi — Vendredi : 8h00 — 16h00<br>Samedi : 9h00 — 13h00</p>
-        
-        <p style="margin-top:1rem;"><strong>Téléphone :</strong><br>📞 +243 82 XX XX XX XX<br>📞 +243 81 XX XX XX XX</p>
-        
-        <p style="margin-top:1rem;"><strong>Email :</strong><br>✉️ contact@fondationpaluku.cd<br>✉️ info@fondationpaluku.cd</p>
-      </div>
       
-      <div class="carte" style="margin-top:1.5rem;">
-        <h3>💬 Paroles de Citoyens</h3>
-        <p>Les messages approuvés apparaissent ici :</p>
-        <div id="liste-citoyens">
-          <p style="color:#718096; font-style:italic;">Chargement des messages...</p>
-        </div>
+      <div id="message-envoye" class="msg-success">
+        ✅ Merci ! Votre message a été envoyé avec succès. Nous le lisons et vous répondrons dans les meilleurs délais.
       </div>
+    </div>
+  </div>
+
+  <!-- === MESSAGES AFFICHÉS PUBLIQUEMENT === -->
+  <div class="suggestions-public">
+    <h3 style="text-align:center; color:#0A3D62; margin-bottom:1.5rem;">💬 Messages et suggestions de nos citoyens</h3>
+    <p style="text-align:center; color:#718096; margin-bottom:2rem;">Voici les messages que vous nous avez confiés et que nous avons approuvés pour publication.</p>
+    
+    <div id="liste-suggestions">
+      <p style="text-align:center; color:#718096;">Chargement des messages...</p>
     </div>
   </div>
 </main>
@@ -110,17 +122,17 @@
       <a href="index.html">Accueil</a>
       <a href="projets.html">Nos Projets</a>
       <a href="realisations.html">Réalisations</a>
-      <a href="contact.html">Contact</a>
+      <a href="faire-un-don.html">Faire un Don</a>
     </div>
     <div class="footer-col">
       <h4>Informations</h4>
       <a href="vie-politique.html">Vie Politique</a>
-      <a href="faire-un-don.html">Faire un Don</a>
+      <a href="contact.html">Suggestions</a>
       <a href="admin.html">Administration</a>
     </div>
     <div class="footer-col">
       <h4>Contact</h4>
-      <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +243 82 XX XX XX XX<br>✉️ contact@fondationpaluku.cd</p>
+      <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +243 82 000 000 00<br>✉️ contact@fondationpaluku.cd</p>
     </div>
   </div>
   <div class="footer-bas">
@@ -129,55 +141,52 @@
 </footer>
 
 <script>
-// Date du jour automatique
-document.getElementById('champ-date').value = new Date().toLocaleDateString('fr-FR');
+// Date automatique
+document.getElementById('date-contact').value = new Date().toLocaleDateString('fr-FR');
 
-// Afficher message de remerciement après envoi
-if (window.location.search.includes('success')) {
-  document.getElementById('message-reussi').style.display = 'block';
-  setTimeout(() => {
-    document.getElementById('message-reussi').style.display = 'none';
-    history.replaceState({}, document.title, window.location.pathname);
-  }, 8000);
+// Afficher message de succès si retour du formulaire
+if (window.location.search.includes('success=1')) {
+  document.getElementById('message-envoye').style.display = 'block';
+  document.getElementById('form-contact').reset();
 }
 
-// Charger et afficher uniquement les messages approuvés
-const LIEN_SHEETDB = "https://sheetdb.io/api/v1/r8w4zccs5agk4";
-
-async function chargerMessagesApprouves() {
-  const conteneur = document.getElementById('liste-citoyens');
-  
+// Charger et afficher SEULEMENT les suggestions approuvées (pas les dons)
+async function chargerSuggestions() {
   try {
-    const reponse = await fetch(LIEN_SHEETDB);
-    const tousLesMessages = await reponse.json();
+    const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4?sort_by=Date&sort_order=desc');
+    const toutesLignes = await reponse.json();
     
-    // Garde seulement les messages avec statut exactement "Approuvé"
-    const messagesFiltres = tousLesMessages.filter(msg => {
-      const statutNettoye = (msg.Statut || "").trim();
-      return statutNettoye === "Approuvé";
-    });
+    // Filtrer : SEULEMENT Type = Suggestion ET Statut = Approuvé
+    const suggestionsApprouvees = toutesLignes.filter(ligne => 
+      ligne.Type && ligne.Type.trim() === 'Suggestion' && 
+      ligne.Statut && ligne.Statut.trim() === 'Approuvé'
+    );
     
-    if (messagesFiltres.length === 0) {
-      conteneur.innerHTML = '<p style="color:#718096; font-style:italic;">Aucun message approuvé pour le moment. Soyez le premier à partager la vôtre !</p>';
+    const conteneur = document.getElementById('liste-suggestions');
+    
+    if (suggestionsApprouvees.length === 0) {
+      conteneur.innerHTML = '<p style="text-align:center; color:#718096;">Aucun message approuvé pour le moment. Soyez le premier à nous écrire !</p>';
       return;
     }
     
     conteneur.innerHTML = '';
-    messagesFiltres.forEach(msg => {
+    suggestionsApprouvees.forEach(ligne => {
       conteneur.innerHTML += `
-        <div style="padding:1rem; background:#F9FAFB; border-radius:6px; margin-bottom:0.8rem; border-left:3px solid #27AE60;">
-          <strong>${msg.Nom}</strong> <small style="color:#718096;">— ${msg.Date}</small>
-          <p style="margin:0.5rem 0 0 0; font-style:italic;">"${msg.Message}"</p>
+        <div class="suggestion">
+          <div class="auteur">${ligne.Nom || 'Citoyen anonyme'}</div>
+          <div class="date-sugg">${ligne.Date || ''}</div>
+          <div class="message-sugg">${ligne.Message || ''}</div>
         </div>
       `;
     });
   } catch (erreur) {
-    conteneur.innerHTML = '<p style="color:red;">Impossible de charger les messages</p>';
     console.error(erreur);
+    document.getElementById('liste-suggestions').innerHTML = 
+      '<p style="text-align:center; color:red;">Impossible de charger les messages. Veuillez réessayer plus tard.</p>';
   }
 }
 
-chargerMessagesApprouves();
+chargerSuggestions();
 </script>
 
 </body>
