@@ -21,6 +21,7 @@
     .auteur { font-weight:600; color:#0A3D62; margin-bottom:0.3rem; }
     .date-sugg { font-size:0.85rem; color:#718096; margin-bottom:0.5rem; }
     .message-sugg { color:#4B5563; }
+    .msg-info { text-align:center; padding:1rem; background:#F3F4F6; border-radius:6px; color:#4B5563; }
   </style>
 </head>
 <body>
@@ -150,22 +151,32 @@ if (window.location.search.includes('success=1')) {
   document.getElementById('form-contact').reset();
 }
 
-// Charger et afficher SEULEMENT les suggestions approuvées (pas les dons)
+// Charger et afficher SEULEMENT les suggestions approuvées
 async function chargerSuggestions() {
   try {
     const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4?sort_by=Date&sort_order=desc');
     const toutesLignes = await reponse.json();
     
-    // Filtrer : SEULEMENT Type = Suggestion ET Statut = Approuvé
-    const suggestionsApprouvees = toutesLignes.filter(ligne => 
-      ligne.Type && ligne.Type.trim() === 'Suggestion' && 
-      ligne.Statut && ligne.Statut.trim() === 'Approuvé'
-    );
+    console.log('Toutes les données :', toutesLignes); // Pour vérifier dans la console
+    
+    // Filtrer : accepte différentes variantes pour être plus flexible
+    const suggestionsApprouvees = toutesLignes.filter(ligne => {
+      const type = (ligne.Type || '').trim().toLowerCase();
+      const statut = (ligne.Statut || '').trim().toLowerCase();
+      return type === 'suggestion' && statut === 'approuvé';
+    });
+    
+    console.log('Suggestions trouvées :', suggestionsApprouvees); // Pour vérifier
     
     const conteneur = document.getElementById('liste-suggestions');
     
     if (suggestionsApprouvees.length === 0) {
-      conteneur.innerHTML = '<p style="text-align:center; color:#718096;">Aucun message approuvé pour le moment. Soyez le premier à nous écrire !</p>';
+      conteneur.innerHTML = `
+        <div class="msg-info">
+          📋 Aucun message approuvé pour le moment.<br>
+          <small>Envoyez un message ci-dessus, puis passez le statut à "Approuvé" dans votre feuille Google Sheets pour qu'il s'affiche ici.</small>
+        </div>
+      `;
       return;
     }
     
@@ -180,9 +191,9 @@ async function chargerSuggestions() {
       `;
     });
   } catch (erreur) {
-    console.error(erreur);
+    console.error('Erreur :', erreur);
     document.getElementById('liste-suggestions').innerHTML = 
-      '<p style="text-align:center; color:red;">Impossible de charger les messages. Veuillez réessayer plus tard.</p>';
+      '<p style="text-align:center; color:red;">❌ Impossible de charger les messages. Veuillez réessayer plus tard.</p>';
   }
 }
 
