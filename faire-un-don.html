@@ -65,46 +65,12 @@
       border-radius: 8px;
       text-align: center;
       max-width: 700px;
-      margin: 0 auto 1rem;
+      margin: 0 auto 2rem;
     }
     .montant-total {
       font-size: 2rem;
       font-weight: bold;
       margin: 0.5rem 0;
-    }
-
-    /* Barre défilante des dons */
-    .barre-dons-defilante {
-      background: #FFF8E1;
-      border: 1px solid #F59E0B;
-      border-radius: 6px;
-      padding: 0.6rem 0;
-      margin-bottom: 2rem;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .contenu-dons-defilant {
-      display: inline-block;
-      padding-left: 100%;
-      animation: defile-dons 35s linear infinite;
-    }
-    .contenu-dons-defilant:hover {
-      animation-play-state: paused;
-    }
-    .item-don-defilant {
-      display: inline-block;
-      padding: 0 2rem;
-      color: #92400E;
-    }
-    .item-don-defilant .nom { font-weight: 600; }
-    .item-don-defilant .montant { font-weight: bold; color: #B45309; }
-    .item-don-defilant .message { font-style: italic; font-size: 0.95rem; }
-    @keyframes defile-dons {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
     }
 
     .carte-don {
@@ -235,13 +201,6 @@
     <p>💰 Total des dons collectés à ce jour</p>
     <div class="montant-total" id="affichage-total">Chargement...</div>
     <small>Merci à tous nos généreux donateurs ❤️</small>
-  </div>
-
-  <!-- BARRE DÉFILANTE DES DONATEURS -->
-  <div class="barre-dons-defilante" id="barre-dons" style="display:none;">
-    <div class="contenu-dons-defilant" id="contenu-dons-defilant">
-      <!-- Les dons s'affichent ici -->
-    </div>
   </div>
 
   <div class="carte-don">
@@ -403,28 +362,18 @@ if (window.location.search.includes('success=1')) {
   document.getElementById('form-don').reset();
   document.getElementById('mode-paiement').value = '';
   afficherInfosPaiement();
-  chargerTout();
+  chargerTotalDons();
 }
 
-chargerTout();
-
-async function chargerTout() {
-  await Promise.all([
-    chargerTotalDons(),
-    chargerBarreDefilante()
-  ]);
-}
+chargerTotalDons();
 
 async function chargerTotalDons() {
   try {
     const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4');
     const toutesLignes = await reponse.json();
     
-    console.log('Données reçues :', toutesLignes); // Pour vérifier dans la console
-    
     let total = 0;
     toutesLignes.forEach(ligne => {
-      console.log('Ligne :', ligne.Type, ligne.Statut, ligne.Montant); // Pour vérifier
       if (ligne.Type === 'Don' && ligne.Statut === 'Approuvé' && ligne.Montant) {
         const chiffres = ligne.Montant.replace(/[^0-9.,]/g, '').replace(',', '.');
         const montant = parseFloat(chiffres);
@@ -436,49 +385,6 @@ async function chargerTotalDons() {
   } catch (erreur) {
     console.error('Erreur chargement total :', erreur);
     document.getElementById('affichage-total').textContent = 'Erreur de chargement';
-  }
-}
-
-async function chargerBarreDefilante() {
-  try {
-    const reponse = await fetch('
-    const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4?sort_by=Date&sort_order=desc');
-    const toutesLignes = await reponse.json();
-    
-    const donsApprouves = toutesLignes.filter(ligne => 
-      ligne.Type === 'Don' && ligne.Statut === 'Approuvé'
-    );
-    
-    console.log('Dons approuvés :', donsApprouves);
-    
-    const barreDons = document.getElementById('barre-dons');
-    const contenuDefilant = document.getElementById('contenu-dons-defilant');
-    
-    if (donsApprouves.length === 0) {
-      barreDons.style.display = 'none';
-      return;
-    }
-    
-    barreDons.style.display = 'block';
-    let html = '';
-    
-    for (let i = 0; i < 2; i++) {
-      donsApprouves.forEach(ligne => {
-        const nom = ligne.Nom || 'Un donateur anonyme';
-        const montant = ligne.Montant || '';
-        const message = ligne.Message ? ` — "${ligne.Message}"` : '';
-        
-        html += `
-          <span class="item-don-defilant">
-            ❤️ ${nom} a donné ${montant}${message} &nbsp;&nbsp;|&nbsp;&nbsp;
-          </span>
-        `;
-      });
-    }
-    
-    contenuDefilant.innerHTML = html;
-  } catch (erreur) {
-    console.error('Erreur chargement barre défilante :', erreur);
   }
 }
 </script>
