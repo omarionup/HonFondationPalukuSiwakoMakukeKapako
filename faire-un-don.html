@@ -73,7 +73,7 @@
       margin: 0.5rem 0;
     }
 
-    /* ✅ Barre défilante des dons — sous le total */
+    /* Barre défilante des dons */
     .barre-dons-defilante {
       background: #FFF8E1;
       border: 1px solid #F59E0B;
@@ -96,7 +96,7 @@
     }
     .item-don-defilant {
       display: inline-block;
-      padding: 0 2.5rem;
+      padding: 0 2rem;
       color: #92400E;
     }
     .item-don-defilant .nom { font-weight: 600; }
@@ -233,14 +233,14 @@
   <!-- === ENCART TOTAL DES DONS === -->
   <div class="encart-total">
     <p>💰 Total des dons collectés à ce jour</p>
-    <div class="montant-total" id="affichage-total">— FC</div>
+    <div class="montant-total" id="affichage-total">Chargement...</div>
     <small>Merci à tous nos généreux donateurs ❤️</small>
   </div>
 
-  <!-- ✅ BARRE DÉFILANTE DES DONATEURS SOUS LE TOTAL -->
+  <!-- BARRE DÉFILANTE DES DONATEURS -->
   <div class="barre-dons-defilante" id="barre-dons" style="display:none;">
     <div class="contenu-dons-defilant" id="contenu-dons-defilant">
-      <!-- Les dons s'affichent ici et défilent -->
+      <!-- Les dons s'affichent ici -->
     </div>
   </div>
 
@@ -255,7 +255,6 @@
       <option value="especes">💵 En espèces au bureau</option>
     </select>
 
-    <!-- === INFOS AIRTEL MONEY === -->
     <div id="infos-airtel" class="infos-paiement">
       <div class="mode-titre">📱 Paiement par Airtel Money</div>
       <p>Utilisez ces numéros pour envoyer votre don :</p>
@@ -273,7 +272,6 @@
       </p>
     </div>
 
-    <!-- === INFOS VERSEMENT BANCAIRE === -->
     <div id="infos-versement" class="infos-paiement">
       <div class="mode-titre">🏦 Versement Bancaire</div>
       <p>Vous pouvez effectuer un virement ou un versement sur notre compte bancaire :</p>
@@ -294,7 +292,6 @@
       </p>
     </div>
 
-    <!-- === INFOS EN ESPÈCES === -->
     <div id="infos-especes" class="infos-paiement">
       <div class="mode-titre">💵 En espèces au bureau</div>
       <p>Vous pouvez également déposer votre don directement dans nos bureaux :</p>
@@ -312,7 +309,6 @@
       </p>
     </div>
 
-    <!-- === FORMULAIRE DE CONFIRMATION DE DON === -->
     <div class="bloc-confirmation">
       <h4>📩 Confirmez votre don</h4>
       <p style="font-size:0.9rem; color:#718096; margin-bottom:1rem;">Remplissez ce formulaire pour nous informer de votre don.</p>
@@ -338,9 +334,8 @@
         <input type="text" id="Reference" name="Reference" placeholder="Code reçu par SMS (facultatif)">
         
         <label for="Message">Message d'accompagnement (facultatif)</label>
-        <textarea id="Message" name="Message" rows="3" placeholder="Écrivez un mot de soutien ou une remarque..."></textarea>
+        <textarea id="Message" name="Message" rows="3" placeholder="Écrivez un mot de soutien..."></textarea>
         
-        <!-- Champs cachés automatiques -->
         <input type="hidden" name="Date" id="date-don">
         <input type="hidden" name="Type" value="Don">
         <input type="hidden" name="Statut" value="En attente">
@@ -349,10 +344,9 @@
         <button type="submit" class="btn-envoyer">📤 Envoyer la confirmation</button>
       </form>
       
-      <!-- Message de remerciement -->
       <div id="message-merci" class="merci-message">
         <strong>🙏 Merci pour votre générosité !</strong><br>
-        Nous avons bien reçu votre confirmation de don. Merci pour votre soutien à la Fondation Paluku.
+        Nous avons bien reçu votre confirmation de don.
       </div>
     </div>
   </div>
@@ -388,7 +382,6 @@
 </footer>
 
 <script>
-// Date automatique
 document.getElementById('date-don').value = new Date().toLocaleDateString('fr-FR');
 
 function afficherInfosPaiement() {
@@ -405,7 +398,6 @@ function afficherInfosPaiement() {
   }
 }
 
-// Message de succès
 if (window.location.search.includes('success=1')) {
   document.getElementById('message-merci').style.display = 'block';
   document.getElementById('form-don').reset();
@@ -423,14 +415,16 @@ async function chargerTout() {
   ]);
 }
 
-// Calculer et afficher le total
 async function chargerTotalDons() {
   try {
     const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4');
     const toutesLignes = await reponse.json();
     
+    console.log('Données reçues :', toutesLignes); // Pour vérifier dans la console
+    
     let total = 0;
     toutesLignes.forEach(ligne => {
+      console.log('Ligne :', ligne.Type, ligne.Statut, ligne.Montant); // Pour vérifier
       if (ligne.Type === 'Don' && ligne.Statut === 'Approuvé' && ligne.Montant) {
         const chiffres = ligne.Montant.replace(/[^0-9.,]/g, '').replace(',', '.');
         const montant = parseFloat(chiffres);
@@ -438,22 +432,24 @@ async function chargerTotalDons() {
       }
     });
     
-    document.getElementById('affichage     document.getElementById('affichage-total').textContent = total.toLocaleString('fr-FR') + ' FC';
+    document.getElementById('affichage-total').textContent = total.toLocaleString('fr-FR') + ' FC';
   } catch (erreur) {
-    console.error(erreur);
-    document.getElementById('affichage-total').textContent = '— FC';
+    console.error('Erreur chargement total :', erreur);
+    document.getElementById('affichage-total').textContent = 'Erreur de chargement';
   }
 }
 
-// Charger la barre défilante des dons
 async function chargerBarreDefilante() {
   try {
+    const reponse = await fetch('
     const reponse = await fetch('https://sheetdb.io/api/v1/r8w4zccs5agk4?sort_by=Date&sort_order=desc');
     const toutesLignes = await reponse.json();
     
     const donsApprouves = toutesLignes.filter(ligne => 
       ligne.Type === 'Don' && ligne.Statut === 'Approuvé'
     );
+    
+    console.log('Dons approuvés :', donsApprouves);
     
     const barreDons = document.getElementById('barre-dons');
     const contenuDefilant = document.getElementById('contenu-dons-defilant');
@@ -466,7 +462,6 @@ async function chargerBarreDefilante() {
     barreDons.style.display = 'block';
     let html = '';
     
-    // Dupliquer pour un défilement continu sans coupure
     for (let i = 0; i < 2; i++) {
       donsApprouves.forEach(ligne => {
         const nom = ligne.Nom || 'Un donateur anonyme';
@@ -475,9 +470,7 @@ async function chargerBarreDefilante() {
         
         html += `
           <span class="item-don-defilant">
-            ❤️ <span class="nom">${nom}</span> a donné 
-            <span class="montant">${montant}</span>
-            ${message} &nbsp;&nbsp;|&nbsp;&nbsp;
+            ❤️ ${nom} a donné ${montant}${message} &nbsp;&nbsp;|&nbsp;&nbsp;
           </span>
         `;
       });
@@ -485,11 +478,10 @@ async function chargerBarreDefilante() {
     
     contenuDefilant.innerHTML = html;
   } catch (erreur) {
-    console.error(erreur);
+    console.error('Erreur chargement barre défilante :', erreur);
   }
 }
 </script>
 
 </body>
 </html>
-
