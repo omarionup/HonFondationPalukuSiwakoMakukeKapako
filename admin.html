@@ -68,8 +68,7 @@
       <button onclick="deconnexion()" style="background:#E74C3C; color:white; border:none; padding:0.6rem 1.2rem; border-radius:4px; cursor:pointer;">🚪 Déconnexion</button>
     </div>
 
-    <!-- 👇 REMPLACE CE LIEN PAR TON LIEN GOOGLE SHEETS -->
-    <a href="https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_TON_LIEN_GOOGLE_SHEET" target="_blank" class="lien-sheet">
+    <a href="https://docs.google.com/spreadsheets/d/1yP7xWFNqKNXbpAoO9LuP07rlki4zCNM3vu/edit" target="_blank" class="lien-sheet">
       📊 Ouvrir mon tableau Google Sheets ↗️
     </a>
     <p style="color:#718096; margin:-0.5rem 0 1.5rem 0; font-size:0.9rem;">Dans le tableau : change "En attente" par "Approuvé" pour publier</p>
@@ -118,8 +117,7 @@
 <script>
 const MOT_DE_PASSE_ADMIN = 'admin2026';
 const LIEN_SHEETDB = "https://sheetdb.io/api/v1/r8w4zccs5agk4";
-// 👇 REMPLACE PAR TON LIEN GOOGLE SHEETS
-const LIEN_GOOGLE_SHEET = "https://docs.google.com/spreadsheets/d/REMPLACE_AVEC_TON_LIEN_GOOGLE_SHEET/edit";
+const LIEN_GOOGLE_SHEET = "https://docs.google.com/spreadsheets/d/1yP7xWFNqKNXbpAoO9LuP07rlki4zCNM3vu/edit";
 
 function verifierMotDePasse(e) {
   e.preventDefault();
@@ -153,7 +151,6 @@ async function chargerEnAttente() {
     const reponse = await fetch(LIEN_SHEETDB);
     const tousLesMessages = await reponse.json();
     
-    // Affiche ceux qui ne sont PAS "Approuvé"
     const messagesEnAttente = tousLesMessages.filter(msg => {
       const statut = (msg.Statut || "").trim();
       return statut !== "Approuvé";
