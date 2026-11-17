@@ -16,13 +16,13 @@
     .merci-message { background:#E8F8F0; border-left:4px solid #27AE60; padding:1rem; border-radius:4px; margin-top:2rem; text-align:center; display:none; }
     .bloc-confirmation { margin-top:2rem; padding-top:1.5rem; border-top:1px dashed #ddd; }
     .bloc-confirmation h4 { color:#0A3D62; margin-bottom:1rem; }
-    input[type="text"], input[type="email"], input[type="file"], textarea {
+    input[type="text"], input[type="email"], textarea {
       width:100%; padding:0.7rem; margin:0.5rem 0 1rem 0; border:1px solid #ddd; border-radius:4px; font-family:inherit;
     }
     label { font-weight:500; color:#333; }
     .btn-envoyer { background:#27AE60; color:white; border:none; padding:0.8rem 1.5rem; border-radius:4px; cursor:pointer; font-size:1rem; width:100%; }
     .btn-envoyer:hover { background:#219653; }
-    .note-fichier { font-size:0.85rem; color:#718096; margin-top:-0.5rem; margin-bottom:1rem; }
+    .note-info { font-size:0.85rem; color:#718096; margin-top:-0.5rem; margin-bottom:1rem; background:#F3F4F6; padding:0.7rem; border-radius:4px; }
   </style>
 </head>
 <body>
@@ -93,7 +93,7 @@
         <span class="label-info">Numéro 2 :</span> +243 97 000 000 00
       </div>
       <p style="margin-top:1rem; font-size:0.9rem; color:#718096;">
-        💡 Après votre envoi, remplissez le formulaire ci-dessous pour nous envoyer la preuve de paiement.
+        💡 Après votre envoi, remplissez le formulaire ci-dessous pour nous confirmer votre don.
       </p>
     </div>
 
@@ -114,7 +114,7 @@
         <span class="label-info">Code SWIFT :</span> — À compléter —
       </div>
       <p style="margin-top:1rem; font-size:0.9rem; color:#718096;">
-        💡 Après votre versement, remplissez le formulaire ci-dessous et joignez le reçu.
+        💡 Après votre versement, remplissez le formulaire ci-dessous pour nous confirmer votre don.
       </p>
     </div>
 
@@ -139,14 +139,18 @@
     <!-- === FORMULAIRE DE CONFIRMATION DE DON === -->
     <div class="bloc-confirmation">
       <h4>📩 Confirmez votre don</h4>
-      <p style="font-size:0.9rem; color:#718096; margin-bottom:1rem;">Remplissez ce formulaire pour nous informer de votre don et nous envoyer la preuve de paiement.</p>
+      <p style="font-size:0.9rem; color:#718096; margin-bottom:1rem;">Remplissez ce formulaire pour nous informer de votre don.</p>
       
-      <form id="form-don" action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST" enctype="multipart/form-data">
-        <label for="NomDonateur">Votre nom complet *</label>
-        <input type="text" id="NomDonateur" name="NomDonateur" required placeholder="Ex: Jean Mulenda">
+      <div class="note-info">
+        📷 Pour envoyer votre preuve de paiement : merci de l'envoyer par WhatsApp au <strong>+243 82 000 000 00</strong> ou par email à <strong>contact@fondationpaluku.cd</strong>
+      </div>
+      
+      <form id="form-don" action="https://sheetdb.io/api/v1/r8w4zccs5agk4" method="POST">
+        <label for="Nom">Votre nom complet *</label>
+        <input type="text" id="Nom" name="Nom" required placeholder="Ex: Jean Mulenda">
         
-        <label for="ContactDonateur">Email ou téléphone *</label>
-        <input type="text" id="ContactDonateur" name="ContactDonateur" required placeholder="votre@email.com ou +243 XX XX XX XX">
+        <label for="Contact">Email ou téléphone *</label>
+        <input type="text" id="Contact" name="Contact" required placeholder="votre@email.com ou +243 XX XX XX XX">
         
         <label for="Montant">Montant du don (FC ou $)</label>
         <input type="text" id="Montant" name="Montant" placeholder="Ex: 50 000 FC">
@@ -154,12 +158,11 @@
         <label for="ModePaiement">Mode de paiement utilisé</label>
         <input type="text" id="ModePaiement" name="ModePaiement" readonly placeholder="Sélectionnez un mode ci-dessus">
         
-        <label for="Messagedon">Message d'accompagnement (facultatif)</label>
-        <textarea id="Messagedon" name="Messagedon" rows="3" placeholder="Écrivez un mot de soutien ou une remarque..."></textarea>
+        <label for="Reference">Numéro de référence de la transaction</label>
+        <input type="text" id="Reference" name="Reference" placeholder="Code reçu par SMS (facultatif)">
         
-        <label for="Preuve">Joindre la preuve de paiement (photo ou reçu)</label>
-        <input type="file" id="Preuve" name="Preuve" accept="image/*,.pdf">
-        <div class="note-fichier">Formats acceptés : JPG, PNG, PDF — Taille max : 5 Mo</div>
+        <label for="Message">Message d'accompagnement (facultatif)</label>
+        <textarea id="Message" name="Message" rows="3" placeholder="Écrivez un mot de soutien ou une remarque..."></textarea>
         
         <!-- Champs cachés automatiques -->
         <input type="hidden" name="Date" id="date-don">
