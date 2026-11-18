@@ -1,154 +1,164 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accueil — Fondation Paluku Siwako Makuké Kapako</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Accueil • Fondation KAPAKO MAKUKE — FOKAMA</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <header>
-    <div class="header-contenu">
-      <div class="logo-conteneur">
-        <!-- Remplacez par votre logo : <img src="images/logo.png" alt="Logo Fondation" class="logo"> -->
-        <img src="logo.png" alt="Logo Fondation Paluku" class="logo">
+    <header class="header">
+        <div class="header-inner">
+            <div class="brand">
+                <img class="logo" src="logo.png" alt="Logo Fondation FOKAMA" />
+                <div>
+                    <h1>Fondation KAPAKO MAKUKE</h1>
+                    <div class="sub">FOKAMA — Transparence • Solidarité • Développement</div>
+                </div>
+            </div>
 
-        <div class="header-titre">
-          <h1>Fondation Paluku</h1>
-          <p>Siwako Makuké Kapako</p>
+            <nav class="nav">
+                <a href="accueil.html">Accueil</a>
+                <a href="reglement-interieur.html">Règlement Intérieur</a>
+                <a href="politique.html">Vie Politique</a>
+                <a href="donation.html">Donation</a>
+                <a href="contact.html">Contact</a>
+            </nav>
         </div>
-      </div>
-      <nav>
-        <ul>
-          <li><a href="index.html" class="actif">Accueil</a></li>
-          <li><a href="projets.html">Nos Projets</a></li>
-          <li><a href="realisations.html">Réalisations</a></li>
-          <li><a href="vie-politique.html">Vie Politique</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="faire-un-don.html" class="bouton-don">Faire un Don</a></li>
-        </ul>
-      </nav>
+    </header>
+
+    <div class="wrap">
+        <section class="hero">
+            <div class="panel hero-left">
+                <div class="kicker"><span class="dot"></span>Plateforme officielle de la Fondation</div>
+                <h2 class="hero-title">Suivez nos projets et nos engagements</h2>
+                <p class="hero-text">
+                    Découvrez nos activités, nos rapports, et le fonctionnement de la Fondation 
+                    KAPAKO MAKUKE — FOKAMA. Basée à Lubero (Nord-Kivu), nous œuvrons pour 
+                    le développement communautaire dans la région et au-delà.
+                </p>
+
+                <div class="cta">
+                    <a class="btn btn-primary" href="donation.html">Faire un don</a>
+                    <a class="btn btn-ghost" href="reglement-interieur.html">Consulter le Règlement Intérieur</a>
+                </div>
+
+                <div class="hr"></div>
+
+                <div class="grid" style="grid-template-columns:repeat(3, 1fr); margin-top:0;">
+                    <div class="card">
+                        <h3>Nos Activités</h3>
+                        <p class="muted">Programmes communautaires</p>
+                    </div>
+                    <div class="card">
+                        <h3>Documents officiels</h3>
+                        <p class="muted">Statuts & Règlement Intérieur</p>
+                    </div>
+                    <div class="card">
+                        <h3>Transparence</h3>
+                        <p class="muted">Gestion responsable & rapports</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="card">
+                    <h3>Alerte Info</h3>
+                    <ul class="list" id="alertes"></ul>
+                    <p class="muted" style="margin-top:10px; font-size:13px;">Les alertes peuvent être mises à jour dans <b>app.js</b>.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Nos Valeurs</h3>
+                    <ul class="list">
+                        <li>Discipline et engagement collectif</li>
+                        <li>Respect des règles et des tiers</li>
+                        <li>Transparence dans la gestion</li>
+                        <li>Solidarité et développement durable</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <h3 class="section-title">Présentation & Organisation</h3>
+        <section class="grid">
+            <div class="card">
+                <h3>À propos de FOKAMA</h3>
+                <p class="muted" style="line-height:1.65;">
+                    La <b>Fondation KAPAKO MAKUKE — FOKAMA</b> a son siège à <b>Lubero, Province du Nord-Kivu</b>. 
+                    Elle peut étendre son action dans toute la République Démocratique du Congo. 
+                    La fondation repose sur la discipline, la conscience et l'engagement de ses membres.
+                </p>
+                <div class="badges" style="margin-top:14px;">
+                    <span class="badge">Développement</span>
+                    <span class="badge">Solidarité</span>
+                    <span class="badge">Communauté</span>
+                    <span class="badge">Nord-Kivu</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Structure</h3>
+                <ul class="list">
+                    <li><b>Assemblée Générale</b> — Organe suprême</li>
+                    <li><b>Conseil d'Administration</b> — Direction stratégique</li>
+                    <li><b>Coordination</b> — Exécution des projets</li>
+                    <li><b>Antennes</b> — Déploiement local</li>
+                </ul>
+                <p class="muted" style="margin-top:10px; font-size:13px;">
+                    Chaque organe travaille dans les limites des responsabilités définies par les statuts et le Règlement Intérieur.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Rapports & Documents</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Description</th>
+                            <th>Accès</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Règlement Intérieur</td>
+                            <td class="muted">Règles de fonctionnement</td>
+                            <td>
+                                <a href="reglement-interieur.html" class="btn btn-primary" style="padding:10px 12px; border-radius:14px;">Lire</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Statuts</td>
+                            <td class="muted">Acte fondateur</td>
+                            <td>
+                                <button class="btn btn-primary" style="padding:10px 12px; border-radius:14px;"
+                                    data-modal="statuts" data-title="Statuts de la Fondation" type="button">À venir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="muted" style="margin-top:10px; font-size:13px;">
+                    Les rapports d'activités seront publiés régulièrement.
+                </p>
+            </div>
+        </section>
     </div>
-  </header>
-<!-- ===== BARRE ALERTES & ACTUALITÉS ===== -->
-<div class="barre-alertes">
-  <div class="etiquette-alerte">
-    <span class="point-clignotant"></span>
-    ALERTES
-  </div>
-  <div class="contenu-actualites">
-    <span class="item-actu">📢 Bienvenue sur le site officiel de la Fondation Paluku Siwako Makuké Kapako — Au service du peuple de Lubero !</span>
-    <span class="item-actu">📍 Prochaine mission : Rencontre communautaire à Lubero-centre — 15 novembre 2026</span>
-    <span class="item-actu">📚 Campagne de distribution de kits scolaires en cours — Merci à nos donateurs !</span>
-    <span class="item-actu">💬 Envoyez vos suggestions via notre page Contact — Votre voix compte !</span>
-  </div>
-</div>
-  <section class="hero">
-    <div class="hero-contenu">
-      <div class="hero-texte">
-        <h2>Au service du peuple de Lubero</h2>
-        <p>« La voix de la population à l'Assemblée nationale » — Ensemble, construisons un avenir meilleur pour notre territoire.</p>
-        <div class="bouton-groupe">
-          <a href="projets.html" class="bouton-primaire">Découvrir nos actions</a>
-          <a href="faire-un-don.html" class="bouton-secondaire">Soutenir la fondation</a>
-        </div>
-      </div>
-      <div>
-        <!-- Remplacez par la photo de l'Honorable Paluku : <img src="images/depute.jpg" alt="Honorable Paluku Siwako Makuké Kapako" class="photo-honorable"> -->
-        <img src="depute.png" alt="Honorable Paluku Siwako Makuké Kapako" class="photo-honorable">
 
-      </div>
+    <footer class="footer">
+        © <span id="year"></span> Fondation KAPAKO MAKUKE — FOKAMA • Lubero, Nord-Kivu, RDC
+    </footer>
+
+    <div id="modal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" type="button" aria-label="Fermer">✕</button>
+            <h3 id="modalTitle">Document</h3>
+            <p id="modalText"></p>
+            <a id="modalLink" href="#" target="_blank" rel="noreferrer" class="btn btn-ghost" style="margin-top:10px;">Ouvrir le document</a>
+        </div>
     </div>
-  </section>
 
-  <main>
-    <section>
-      <h2 class="titre-section">Présentation</h2>
-      <div class="grille-2">
-        <div>
-          <h3 style="color:#0A3D62; margin-bottom:1rem;">Notre Mission</h3>
-          <p style="margin-bottom:1rem;">La Fondation Paluku Siwako Makuké Kapako a pour mission de contribuer au bien-être de la population du territoire de Lubero à travers des actions concrètes, mesurables et durables dans les domaines de l'éducation, la santé, le développement communautaire et la bonne gouvernance.</p>
-          <p>Nous croyons en une approche participative où chaque citoyen a sa place et peut contribuer au développement de sa communauté.</p>
-        </div>
-        <div>
-          <h3 style="color:#0A3D62; margin-bottom:1rem;">Nos Valeurs</h3>
-          <div style="display:grid; gap:1rem;">
-            <div style="padding:1rem; background:#F4F6F8; border-radius:6px;"><strong>📊 Transparence</strong> — Rendre des comptes clairement à la population</div>
-            <div style="padding:1rem; background:#F4F6F8; border-radius:6px;"><strong>🤝 Solidarité</strong> — Agir ensemble pour les plus démunis</div>
-            <div style="padding:1rem; background:#F4F6F8; border-radius:6px;"><strong>🗣️ Participation</strong> — Écouter et impliquer la population</div>
-            <div style="padding:1rem; background:#F4F6F8; border-radius:6px;"><strong>🎯 Impact</strong> — Des résultats visibles sur le terrain</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="titre-section">Nos Réalisations en Chiffres</h2>
-      <div class="grille-stats">
-        <div class="carte-stat">
-          <div class="chiffre">12</div>
-          <p>Activités menées</p>
-        </div>
-        <div class="carte-stat">
-          <div class="chiffre">04</div>
-          <p>Projets en cours</p>
-        </div>
-        <div class="carte-stat">
-          <div class="chiffre">05</div>
-          <p>Rapports publiés</p>
-        </div>
-        <div class="carte-stat">
-          <div class="chiffre">∞</div>
-          <p>Engagement total</p>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="titre-section">À la Une</h2>
-      <div class="grille-2">
-        <div class="carte">
-          <h3>📢 Bienvenue sur notre site</h3>
-          <p>Découvrez nos projets, nos actualités et partagez vos suggestions. Ensemble, construisons un avenir meilleur pour Lubero !</p>
-        </div>
-        <div class="carte">
-          <h3>💬 Paroles de Citoyens</h3>
-          <p>Vos suggestions et messages sont importants. Vous pouvez nous envoyer vos propositions via notre page Contact — elles seront étudiées et publiées si elles sont approuvées.</p>
-          <a href="contact.html" style="color:#0A3D62; font-weight:500;">→ Envoyer une suggestion</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-contenu">
-      <div class="footer-col">
-        <h4>Fondation Paluku</h4>
-        <p>Siwako Makuké Kapako<br>Au service du peuple de Lubero</p>
-      </div>
-      <div class="footer-col">
-        <h4>Liens rapides</h4>
-        <a href="index.html">Accueil</a>
-        <a href="projets.html">Nos Projets</a>
-        <a href="realisations.html">Réalisations</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="footer-col">
-        <h4>Informations</h4>
-        <a href="vie-politique.html">Vie Politique</a>
-        <a href="faire-un-don.html">Faire un Don</a>
-        <a href="admin.html">Administration</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <p>📍 Lubero, Nord-Kivu, RDC<br>📞 +247 XXX XXX XXX<br>✉️ contact@fondationpaluku.cd</p>
-      </div>
-    </div>
-    <div class="footer-bas">
-      © 2026 Fondation Paluku Siwako Makuké Kapako — Tous droits réservés
-    </div>
-  </footer>
-
+    <script src="app.js"></script>
 </body>
 </html>
