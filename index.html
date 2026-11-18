@@ -11,16 +11,15 @@
     <header class="header">
         <div class="header-inner">
             <div class="brand">
-                <img class="logo" src="logo.png" alt="Logo Fondation FOKAMA" />
+                <img class="logo" src="logo.png" alt="Logo Fondation" />
                 <div>
-                    <h1>Fondation KAPAKO MAKUKE</h1>
-                    <div class="sub">FOKAMA — Transparence • Solidarité • Développement</div>
+                    <h1>Fondation KAPAKO MAKUKE — FOKAMA</h1>
+                    <div class="sub">Transparence • Solidarité • Développement</div>
                 </div>
             </div>
 
             <nav class="nav">
                 <a href="accueil.html">Accueil</a>
-                <a href="reglement-interieur.html">Règlement Intérieur</a>
                 <a href="politique.html">Vie Politique</a>
                 <a href="donation.html">Donation</a>
                 <a href="contact.html">Contact</a>
@@ -31,17 +30,17 @@
     <div class="wrap">
         <section class="hero">
             <div class="panel hero-left">
-                <div class="kicker"><span class="dot"></span>Plateforme officielle de la Fondation</div>
-                <h2 class="hero-title">Suivez nos projets et nos engagements</h2>
+                <div class="kicker"><span class="dot"></span>Plateforme officielle</div>
+                <h2 class="hero-title">Découvrez la Fondation FOKAMA</h2>
                 <p class="hero-text">
-                    Découvrez nos activités, nos rapports, et le fonctionnement de la Fondation 
-                    KAPAKO MAKUKE — FOKAMA. Basée à Lubero (Nord-Kivu), nous œuvrons pour 
-                    le développement communautaire dans la région et au-delà.
+                    Basée à Lubero, au Nord-Kivu, la Fondation KAPAKO MAKUKE FOKAMA agit pour 
+                    le bien-être des communautés. Découvrez nos projets, nos valeurs et notre 
+                    organisation. La confiance se bâtit par la transparence et l'engagement.
                 </p>
 
                 <div class="cta">
                     <a class="btn btn-primary" href="donation.html">Faire un don</a>
-                    <a class="btn btn-ghost" href="reglement-interieur.html">Consulter le Règlement Intérieur</a>
+                    <a class="btn btn-ghost" href="politique.html">En savoir plus</a>
                 </div>
 
                 <div class="hr"></div>
@@ -49,15 +48,15 @@
                 <div class="grid" style="grid-template-columns:repeat(3, 1fr); margin-top:0;">
                     <div class="card">
                         <h3>Nos Activités</h3>
-                        <p class="muted">Programmes communautaires</p>
+                        <p class="muted">Projets & programmes communautaires</p>
                     </div>
                     <div class="card">
-                        <h3>Documents officiels</h3>
-                        <p class="muted">Statuts & Règlement Intérieur</p>
+                        <h3>Organisation</h3>
+                        <p class="muted">Structure & fonctionnement</p>
                     </div>
                     <div class="card">
                         <h3>Transparence</h3>
-                        <p class="muted">Gestion responsable & rapports</p>
+                        <p class="muted">Documents officiels</p>
                     </div>
                 </div>
             </div>
@@ -66,7 +65,7 @@
                 <div class="card">
                     <h3>Alerte Info</h3>
                     <ul class="list" id="alertes"></ul>
-                    <p class="muted" style="margin-top:10px; font-size:13px;">Les alertes peuvent être mises à jour dans <b>app.js</b>.</p>
+                    <p class="muted" style="margin-top:10px; font-size:13px;">Les alertes peuvent être mises à jour dans <b>app.js</b> (démo).</p>
                 </div>
 
                 <div class="card">
@@ -75,50 +74,43 @@
                         <li>Discipline et engagement collectif</li>
                         <li>Respect des règles et des tiers</li>
                         <li>Transparence dans la gestion</li>
-                        <li>Solidarité et développement durable</li>
+                        <li>Solidarité et action durable</li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <h3 class="section-title">Présentation & Organisation</h3>
+        <h3 class="section-title">Présentation & Projets</h3>
         <section class="grid">
             <div class="card">
-                <h3>À propos de FOKAMA</h3>
+                <h3>Présentation</h3>
                 <p class="muted" style="line-height:1.65;">
-                    La <b>Fondation KAPAKO MAKUKE — FOKAMA</b> a son siège à <b>Lubero, Province du Nord-Kivu</b>. 
-                    Elle peut étendre son action dans toute la République Démocratique du Congo. 
-                    La fondation repose sur la discipline, la conscience et l'engagement de ses membres.
+                    La Fondation <b>KAPAKO MAKUKE FOKAMA</b> a son siège à <b>Lubero, Nord-Kivu</b>. 
+                    Elle peut étendre son action dans toute la RDC. Son fonctionnement repose 
+                    sur la discipline, la conscience et l'engagement de ses membres au service 
+                    des communautés.
                 </p>
                 <div class="badges" style="margin-top:14px;">
-                    <span class="badge">Développement</span>
-                    <span class="badge">Solidarité</span>
                     <span class="badge">Communauté</span>
+                    <span class="badge">Développement</span>
                     <span class="badge">Nord-Kivu</span>
+                    <span class="badge">Solidarité</span>
                 </div>
             </div>
 
             <div class="card">
-                <h3>Structure</h3>
-                <ul class="list">
-                    <li><b>Assemblée Générale</b> — Organe suprême</li>
-                    <li><b>Conseil d'Administration</b> — Direction stratégique</li>
-                    <li><b>Coordination</b> — Exécution des projets</li>
-                    <li><b>Antennes</b> — Déploiement local</li>
-                </ul>
-                <p class="muted" style="margin-top:10px; font-size:13px;">
-                    Chaque organe travaille dans les limites des responsabilités définies par les statuts et le Règlement Intérieur.
-                </p>
+                <h3>Nos Activités</h3>
+                <div class="timeline" id="activities"></div>
             </div>
 
             <div class="card">
-                <h3>Rapports & Documents</h3>
+                <h3>Documents officiels (à venir)</h3>
                 <table class="table">
                     <thead>
                         <tr>
                             <th>Document</th>
-                            <th>Description</th>
-                            <th>Accès</th>
+                            <th>Présentation</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,7 +118,8 @@
                             <td>Règlement Intérieur</td>
                             <td class="muted">Règles de fonctionnement</td>
                             <td>
-                                <a href="reglement-interieur.html" class="btn btn-primary" style="padding:10px 12px; border-radius:14px;">Lire</a>
+                                <button class="btn btn-primary" style="padding:10px 12px; border-radius:14px;"
+                                    data-modal="report" data-title="Règlement Intérieur" type="button">Voir</button>
                             </td>
                         </tr>
                         <tr>
@@ -134,20 +127,20 @@
                             <td class="muted">Acte fondateur</td>
                             <td>
                                 <button class="btn btn-primary" style="padding:10px 12px; border-radius:14px;"
-                                    data-modal="statuts" data-title="Statuts de la Fondation" type="button">À venir</button>
+                                    data-modal="report" data-title="Statuts de la Fondation" type="button">Voir</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
                 <p class="muted" style="margin-top:10px; font-size:13px;">
-                    Les rapports d'activités seront publiés régulièrement.
+                    Plus tard : ajoutez des liens vers vos documents PDF.
                 </p>
             </div>
         </section>
     </div>
 
     <footer class="footer">
-        © <span id="year"></span> Fondation KAPAKO MAKUKE — FOKAMA • Lubero, Nord-Kivu, RDC
+        © <span id="year"></span> Fondation KAPAKO MAKUKE — FOKAMA
     </footer>
 
     <div id="modal" class="modal" aria-hidden="true">
